@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Week 4 Activity: Career Pathway Analyzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&family=Wix+Madefor+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a14;color:#e2e8f0;font-family:'Wix Madefor Text',sans-serif;font-size:15px;line-height:1.7}
+.header{background:#0E1C42;padding:14px 24px;display:flex;align-items:center;gap:14px;border-bottom:2px solid #55C8E8}
+.header-title{font-family:'Wix Madefor Display',sans-serif;font-size:14px;font-weight:700;color:#fff}
+.header-sub{font-size:11px;color:#55C8E8}
+.badge{margin-left:auto;background:#F78F1E;color:#fff;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;font-family:'Wix Madefor Display',sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:28px 20px 60px}
+.hero{background:linear-gradient(135deg,#0E1C42,#1a2d5a);border-radius:16px;padding:32px;margin-bottom:28px;border:1px solid rgba(85,200,232,0.25)}
+.hero h1{font-family:'Wix Madefor Display',sans-serif;font-size:26px;font-weight:800;color:#a0d4f0;margin-bottom:8px}
+.hero p{color:#94a3b8;font-size:14px}
+.progress-bar{background:#111122;border-radius:14px;padding:18px 24px;margin-bottom:24px;border:1px solid rgba(255,255,255,0.06)}
+.progress-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#55C8E8;font-family:'Wix Madefor Display',sans-serif;margin-bottom:10px}
+.progress-track{background:rgba(255,255,255,0.06);border-radius:20px;height:10px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,#55C8E8,#76C043);height:100%;border-radius:20px;transition:width 0.5s ease}
+.progress-text{font-size:12px;color:#94a3b8;margin-top:6px;text-align:right}
+.card{background:#111122;border-radius:14px;padding:28px;margin-bottom:24px;border:1px solid rgba(255,255,255,0.06)}
+.card h2{font-family:'Wix Madefor Display',sans-serif;font-size:20px;font-weight:700;color:#e2e8f0;margin-bottom:6px}
+.card-phase{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#9b59b6;font-family:'Wix Madefor Display',sans-serif;margin-bottom:6px}
+.card p.desc{color:#c8d6e8;font-size:14px;margin-bottom:18px}
+.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.option-btn{background:rgba(85,200,232,0.06);border:2px solid rgba(85,200,232,0.15);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;text-align:left;color:#e2e8f0;font-family:'Wix Madefor Text',sans-serif;font-size:14px}
+.option-btn:hover{border-color:#55C8E8;background:rgba(85,200,232,0.12);transform:translateY(-1px)}
+.option-btn.correct{border-color:#76C043;background:rgba(118,192,67,0.15)}
+.option-btn.incorrect{border-color:#ef4444;background:rgba(239,68,68,0.1)}
+.option-btn.disabled{pointer-events:none;opacity:0.7}
+.option-btn.selected{border-color:#55C8E8;background:rgba(85,200,232,0.15);box-shadow:0 0 12px rgba(85,200,232,0.2)}
+.feedback{border-radius:10px;padding:16px 20px;margin-top:16px;display:none;font-size:14px}
+.feedback.correct{background:rgba(118,192,67,0.1);border:1px solid rgba(118,192,67,0.3);color:#a3e635}
+.feedback.incorrect{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#fca5a5}
+.next-btn{background:linear-gradient(135deg,#55C8E8,#0E5568);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Wix Madefor Display',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;display:none;transition:all 0.2s}
+.next-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(85,200,232,0.3)}
+.scenario-box{background:rgba(0,0,0,0.25);border-radius:12px;padding:20px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.05)}
+.scenario-label{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#F78F1E;margin-bottom:6px}
+.scenario-text{color:#e2e8f0;font-size:14px}
+.results{background:linear-gradient(135deg,#0E1C42,#1a2d5a);border-radius:16px;padding:36px;margin-bottom:28px;border:1px solid rgba(85,200,232,0.25);text-align:center;display:none}
+.results h2{font-family:'Wix Madefor Display',sans-serif;font-size:28px;font-weight:800;color:#a0d4f0;margin-bottom:12px}
+.score-circle{width:120px;height:120px;border-radius:50%;margin:20px auto;display:flex;align-items:center;justify-content:center;font-family:'Wix Madefor Display',sans-serif;font-size:36px;font-weight:800;color:#fff}
+.score-high{background:linear-gradient(135deg,#76C043,#4a8a25);border:3px solid rgba(118,192,67,0.5)}
+.score-mid{background:linear-gradient(135deg,#C7922C,#9a7020);border:3px solid rgba(199,146,44,0.5)}
+.score-low{background:linear-gradient(135deg,#ef4444,#b91c1c);border:3px solid rgba(239,68,68,0.5)}
+.retry-btn{background:linear-gradient(135deg,#C7922C,#9a7020);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Wix Madefor Display',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;transition:all 0.2s}
+.retry-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(199,146,44,0.3)}
+@media(max-width:600px){.option-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-title">Personal Finance &amp; Money Management</div>
+    <div class="header-sub">Optima Academy Online</div>
+  </div>
+  <div class="badge">Activity · Week 4</div>
+</div>
+
+<div class="wrap">
+
+<div class="hero">
+  <h1>Career Pathway Analyzer</h1>
+  <p>Compare education paths, calculate real ROI, and match the right career strategy to real-life situations. Every question uses actual financial data — no guesswork allowed.</p>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-label">YOUR PROGRESS</div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-text" id="progressText">Question 0 of 10</div>
+</div>
+
+<div id="questionContainer"></div>
+
+<div class="results" id="results">
+  <h2 id="resultsTitle">Analysis Complete!</h2>
+  <div class="score-circle" id="scoreCircle">0%</div>
+  <p id="resultsMsg" style="color:#c8d6e8;font-size:15px;margin:16px 0;max-width:500px;margin-left:auto;margin-right:auto;"></p>
+  <p id="scoreBreakdown" style="color:#94a3b8;font-size:13px;margin-bottom:16px;"></p>
+  <button class="retry-btn" onclick="restartActivity()">Analyze Again</button>
+</div>
+
+</div>
+
+<script>
+const questions = [
+  // PHASE 1: PATHWAY KNOWLEDGE (Q1-3)
+  {
+    phase:"PHASE 1: PATHWAY KNOWLEDGE",
+    title:"Match the Path",
+    scenario:"Alexis wants to become a dental hygienist. The job requires an associate's degree (2 years), has a median salary of $81,400, and has a 7% growth rate (faster than average). She can complete her program at a local community college for about $12,000 total.",
+    question:"Which pathway best describes Alexis's plan?",
+    options:["Four-year college/university","Trade school / vocational training","Military service","Direct workforce entry"],
+    correct:1,
+    correctFeedback:"Correct! A 2-year associate's degree program at a community college for a specific skilled career (dental hygiene) is vocational/trade training. Notice the excellent ROI: $12,000 investment for an $81,400 median salary. That's a payback period of about 2 months of full-time work.",
+    incorrectFeedback:"This is a vocational/trade path — a 2-year associate's degree program for a specific skilled career. It's not a 4-year bachelor's, not military, and not entering the workforce without credentials. The $12K cost for an $81K career is outstanding ROI."
+  },
+  {
+    phase:"PHASE 1: PATHWAY KNOWLEDGE",
+    title:"The Hybrid Path",
+    scenario:"Marcus graduated high school and enlisted in the Navy for 4 years. He trained as an electronics technician, earned his certifications, and saved $40,000 during service. After his enlistment, he's using the GI Bill to attend a state university for electrical engineering.",
+    question:"What makes Marcus's plan financially strategic?",
+    options:["He avoided college entirely and went straight to work","He combined military + college: got paid to train, saved money, and now attends college for free via GI Bill","He chose the cheapest option available","He's only using one pathway"],
+    correct:1,
+    correctFeedback:"Excellent analysis! Marcus used a hybrid strategy: military service gave him paid training, savings ($40K), and the GI Bill (which covers tuition + provides a housing stipend). He'll graduate with an engineering degree, zero debt, $40K in savings, AND 4 years of professional experience. That's arguably the highest-ROI path to a bachelor's degree.",
+    incorrectFeedback:"Marcus combined two pathways strategically: military → college. He got paid during service, saved $40K, earned technical certifications, and now the GI Bill pays for his degree. He'll graduate debt-free with savings AND experience."
+  },
+  {
+    phase:"PHASE 1: PATHWAY KNOWLEDGE",
+    title:"Pathway Pros and Cons",
+    scenario:"Elena is deciding between entering the workforce directly after high school as a real estate agent (no degree required, commission-based income) or attending a 4-year university for a marketing degree ($28,000/year).",
+    question:"Which factor should Elena weigh MOST heavily in her decision?",
+    options:["Which option sounds more impressive on social media","The income stability of commission-based work vs. salary, and whether the $112,000 degree cost is justified by the salary difference","Whether her friends are going to college","The prestige of having a degree"],
+    correct:1,
+    correctFeedback:"That's the right framework! Elena needs to compare: real estate (variable commission income, $0 education cost, immediate earning) vs. marketing (more stable salary, $112K investment, 4-year delay in earning). Key questions: What's the realistic income for each path at age 25? 30? Does the marketing degree's salary premium justify $112K? Could she do real estate AND take marketing courses part-time?",
+    incorrectFeedback:"Financial decisions should be based on data, not social pressure. Elena needs to compare income stability (commission vs. salary), the $112K degree cost vs. the salary premium it provides, and whether hybrid options exist."
+  },
+  // PHASE 2: ROI CALCULATIONS (Q4-7)
+  {
+    phase:"PHASE 2: ROI CALCULATIONS",
+    title:"Calculate Education ROI",
+    scenario:"Path A: Trade school for welding. Cost: $9,000. Starting salary: $45,000.\nPath B: 4-year university for business. Cost: $100,000. Starting salary: $52,000.\n\nAssume both work for 30 years after completing their education.",
+    question:"Which path has the better first-year ROI (salary ÷ education cost)?",
+    options:["Path A: 500% ROI ($45K ÷ $9K = 5.0)","Path B: 52% ROI ($52K ÷ $100K = 0.52)","They're about equal","Path B — the higher salary always wins"],
+    correct:0,
+    correctFeedback:"Path A absolutely dominates in first-year ROI! The welder earns 5× their education cost in the first year alone. The business grad earns just 52% of their education cost. Even if the business degree leads to higher lifetime earnings, it takes YEARS to overcome the $91,000 cost gap. Plus, the welder started earning 2 years earlier.",
+    incorrectFeedback:"ROI = Return ÷ Investment. Path A: $45,000 ÷ $9,000 = 5.0 (500%). Path B: $52,000 ÷ $100,000 = 0.52 (52%). The welder's education pays for itself in about 2.4 months. The business degree takes nearly 2 years of salary just to break even on the cost."
+  },
+  {
+    phase:"PHASE 2: ROI CALCULATIONS",
+    title:"The Debt Factor",
+    scenario:"Two graduates start working at age 22:\n\nGrad A: $48,000 salary, $0 debt (went to community college on scholarship)\nGrad B: $55,000 salary, $80,000 in student loans at 5% interest, $850/month loan payment for 10 years",
+    question:"After loan payments, what is Grad B's effective monthly take-home advantage over Grad A? (Ignore taxes for simplicity.)",
+    options:["Grad B takes home $583 MORE per month ($7,000 salary difference ÷ 12)","Grad B takes home $267 LESS per month ($583 advantage − $850 payment)","They take home the same amount","Grad B takes home $850 MORE per month"],
+    correct:1,
+    correctFeedback:"This is a critical insight! Grad B earns $7,000 more per year ($583/month more). BUT their $850/month loan payment exceeds that advantage by $267. So despite earning more, Grad B actually has $267 LESS in disposable income each month for 10 years. After 10 years the loans are paid off and Grad B pulls ahead — but that's a decade of tighter finances.",
+    incorrectFeedback:"Salary advantage: ($55K − $48K) ÷ 12 = $583/month more for Grad B. Loan payment: $850/month. Net: $583 − $850 = −$267. Grad B actually takes home $267 LESS per month despite the higher salary. Student debt can erase a salary advantage for years."
+  },
+  {
+    phase:"PHASE 2: ROI CALCULATIONS",
+    title:"Lifetime Earnings",
+    scenario:"According to BLS data, the median lifetime earnings by education level are approximately:\n\n• High school diploma: $1.6 million\n• Associate's degree: $2.0 million\n• Bachelor's degree: $2.8 million\n• Master's degree: $3.2 million",
+    question:"What is the approximate lifetime earnings PREMIUM of a bachelor's degree over a high school diploma?",
+    options:["$1.2 million — but you must subtract education costs to get the true net advantage","$2.8 million — the full bachelor's earnings","$400,000 — the difference between bachelor's and master's","$1.2 million — and education costs don't matter"],
+    correct:0,
+    correctFeedback:"You're thinking like a financial analyst! The raw premium is $2.8M − $1.6M = $1.2 million. But to calculate the REAL advantage, you must subtract education costs and interest. If a bachelor's costs $100K with $30K in interest, the true premium is about $1.07M — still significant, but not $1.2M. Always account for the cost of getting there.",
+    incorrectFeedback:"The premium is $2.8M − $1.6M = $1.2M. But the true financial advantage requires subtracting education costs (tuition + interest + years of lost income while studying). The degree is still a strong investment for most people, but the $1.2M headline number overstates the net benefit."
+  },
+  {
+    phase:"PHASE 2: ROI CALCULATIONS",
+    title:"The Community College Strategy",
+    scenario:"Liam wants a bachelor's in computer science. He has two options:\n\nOption A: 4 years at State University — $24,000/year = $96,000 total\nOption B: 2 years at community college ($4,500/yr) + 2 years at State University ($24,000/yr) = $57,000 total",
+    question:"How much does the community college transfer strategy save, and does it affect the final degree?",
+    options:["Saves $39,000. The diploma says 'State University' regardless — employers see the same degree.","Saves $39,000 but the degree is worth less because it started at community college.","Saves $9,000 — the difference isn't that large.","No savings — community college credits don't transfer."],
+    correct:0,
+    correctFeedback:"$39,000 in savings! ($96K − $57K). And here's the key fact: when you transfer and graduate, your diploma says 'State University' — not 'started at community college.' Employers see the same bachelor's degree. This is one of the most underused financial strategies in education. Many community colleges have guaranteed transfer agreements with state universities.",
+    incorrectFeedback:"Option A: $96,000. Option B: $9,000 + $48,000 = $57,000. Savings: $39,000. The diploma from a transfer student says the same university name as someone who attended all four years. Credits transfer through articulation agreements. Same degree, $39K less debt."
+  },
+  // PHASE 3: CAREER DATA (Q8-10)
+  {
+    phase:"PHASE 3: CAREER RESEARCH",
+    title:"Reading Job Outlook Data",
+    scenario:"The BLS Occupational Outlook Handbook shows:\n\n• Software Developer: Median salary $132,270, 25% growth (much faster than average)\n• Paralegal: Median salary $60,970, 4% growth (as fast as average)\n• Pharmacy Technician: Median salary $40,300, 6% growth (faster than average)",
+    question:"Based purely on career DATA (not personal interest), which career offers the strongest financial outlook?",
+    options:["Paralegal — stable growth and decent salary","Software Developer — highest salary AND fastest growth rate","Pharmacy Technician — healthcare is always in demand","All three are equal because they all have positive growth"],
+    correct:1,
+    correctFeedback:"Software development wins on both dimensions: highest salary ($132K) AND fastest growth (25%). High growth = more job openings = better negotiating power = more opportunities. But remember — data alone shouldn't drive your choice. A career you hate paying $132K is worse than a career you love paying $61K. Data informs the decision; passion sustains it.",
+    incorrectFeedback:"When evaluating career data, look at BOTH salary AND growth. Software development offers the highest salary ($132K) and the fastest growth (25%). More growth means more job openings and better negotiating leverage. That said, financial data is just one factor — fit and interest matter too."
+  },
+  {
+    phase:"PHASE 3: CAREER RESEARCH",
+    title:"Median vs. Average",
+    scenario:"A job posting says: 'Real estate agents earn an AVERAGE of $95,000 per year!' But the BLS shows the MEDIAN salary is $54,300. The top 10% earn over $166,000, while the bottom 25% earn under $35,000.",
+    question:"Why is the median more useful than the average for career research?",
+    options:["They're the same thing — just different words","The median isn't skewed by extremely high earners, so it better represents what a typical agent actually earns","The average is always more accurate","The median is only useful for comparing two jobs"],
+    correct:1,
+    correctFeedback:"Exactly right! A few agents earning $500K+ pull the average way up to $95K, but most agents earn closer to $54K (the median). The median is the true midpoint — half earn more, half earn less. When job ads tout the 'average' salary, they're using the inflated number to attract applicants. Always check the median for a realistic picture.",
+    incorrectFeedback:"Average vs. median matters enormously. A few real estate agents earning $500K+ inflate the average to $95K. But the median ($54K) is the true midpoint — half earn more, half less. The 'average' is misleading because outliers skew it upward. Always use median salary data."
+  },
+  {
+    phase:"PHASE 3: CAREER RESEARCH",
+    title:"Building Your Career Plan",
+    scenario:"You're helping a friend build a career plan. They're interested in cybersecurity. You look up the BLS data: Median salary: $120,360. Growth rate: 32% (much faster than average). Education: Bachelor's degree typical, but certifications (CompTIA, CISSP) can substitute. The field has a massive worker shortage.",
+    question:"Based on this data, what's the SMARTEST financial pathway into cybersecurity?",
+    options:["4-year private university CS degree ($220,000) — the most prestigious path","Community college IT program + industry certifications ($15,000) — strong ROI, high demand means certifications matter more than school name","Skip all education — just watch YouTube tutorials","Wait until the field stops growing to avoid competition"],
+    correct:1,
+    correctFeedback:"Outstanding career thinking! In cybersecurity, the worker shortage means employers care more about SKILLS and CERTIFICATIONS than school prestige. A community college IT program + CompTIA Security+/CySA+ certifications costs about $15K and can land you a $70K+ entry-level role. Compare that to $220K for a private university degree leading to the same job. The ROI difference is massive. You can always pursue a bachelor's later while working.",
+    incorrectFeedback:"In high-demand, shortage fields like cybersecurity, certifications often carry as much weight as degrees. The $15K community college + certification path has dramatically better ROI than the $220K private university path — especially when employers are desperate for skilled workers regardless of school name."
+  }
+];
+
+let currentQuestion=0,score=0,answered=false;
+
+function renderQuestion(){
+  const q=questions[currentQuestion];
+  const pct=Math.round((currentQuestion/questions.length)*100);
+  document.getElementById('progressFill').style.width=pct+'%';
+  document.getElementById('progressText').textContent=`Question ${currentQuestion+1} of ${questions.length}`;
+  let opts='';
+  q.options.forEach((o,i)=>{opts+=`<button class="option-btn" onclick="selectAnswer(${i})" id="opt${i}">${o}</button>`;});
+  document.getElementById('questionContainer').innerHTML=`
+    <div class="card">
+      <div class="card-phase">${q.phase}</div>
+      <h2>${q.title}</h2>
+      <div class="scenario-box"><div class="scenario-label">SCENARIO</div><div class="scenario-text">${q.scenario.replace(/\n/g,'<br>')}</div></div>
+      <p class="desc"><strong>${q.question}</strong></p>
+      <div class="option-grid">${opts}</div>
+      <div class="feedback correct" id="correctFeedback"><strong>✅ ${q.correctFeedback}</strong></div>
+      <div class="feedback incorrect" id="incorrectFeedback"><strong>❌ ${q.incorrectFeedback}</strong></div>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">${currentQuestion<questions.length-1?'Next Question →':'See Results'}</button>
+    </div>`;
+  answered=false;
+}
+
+function selectAnswer(idx){
+  if(answered)return;answered=true;
+  const q=questions[currentQuestion];
+  document.querySelectorAll('.option-btn').forEach((btn,i)=>{
+    btn.classList.add('disabled');
+    if(i===q.correct)btn.classList.add('correct');
+    if(i===idx&&i!==q.correct)btn.classList.add('incorrect');
+    if(i===idx)btn.classList.add('selected');
+  });
+  if(idx===q.correct){score++;document.getElementById('correctFeedback').style.display='block';}
+  else{document.getElementById('incorrectFeedback').style.display='block';}
+  document.getElementById('nextBtn').style.display='inline-block';
+}
+
+function nextQuestion(){
+  currentQuestion++;
+  if(currentQuestion>=questions.length)showResults();
+  else renderQuestion();
+}
+
+function showResults(){
+  document.getElementById('questionContainer').innerHTML='';
+  document.getElementById('progressFill').style.width='100%';
+  document.getElementById('progressText').textContent='Analysis Complete!';
+  const pct=Math.round((score/questions.length)*100);
+  const c=document.getElementById('scoreCircle');c.textContent=pct+'%';
+  if(pct>=80){c.className='score-circle score-high';document.getElementById('resultsTitle').textContent='Career Strategist!';document.getElementById('resultsMsg').textContent="You understand how to evaluate education ROI, compare career pathways using real data, and make financially informed decisions about your future. These skills put you ahead of most adults when it comes to career planning.";}
+  else if(pct>=60){c.className='score-circle score-mid';document.getElementById('resultsTitle').textContent='Solid Analysis!';document.getElementById('resultsMsg').textContent="You've got a good foundation in career pathway analysis. Review the ROI calculation questions — understanding the math behind education costs vs. salary returns is crucial for making smart post-secondary decisions.";}
+  else{c.className='score-circle score-low';document.getElementById('resultsTitle').textContent='Keep Researching!';document.getElementById('resultsMsg').textContent="Career planning is a big topic with a lot of moving parts. Re-read the Week 4 reading, especially the ROI comparison table and the career research tools section. Focus on understanding WHY certain paths have better financial returns than others.";}
+  document.getElementById('scoreBreakdown').textContent=`You scored ${score} out of ${questions.length} (${pct}%)`;
+  document.getElementById('results').style.display='block';
+}
+
+function restartActivity(){currentQuestion=0;score=0;document.getElementById('results').style.display='none';renderQuestion();}
+renderQuestion();
+</script>
+</body>
+</html>
