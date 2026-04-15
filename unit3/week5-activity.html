@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5 Activity: Budget Builder Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@700;800&family=Wix+Madefor+Text:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#0a0a14; color:#e2e8f0; font-family:'Wix Madefor Text', sans-serif; font-weight:400; line-height:1.7; font-size:16px; }
+
+        .header-bar { background:#0E1C42; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+        .header-title { font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:18px; color:#fff; letter-spacing:0.5px; }
+        .header-sub { font-size:13px; color:#55C8E8; font-weight:500; }
+        .header-badge { background:linear-gradient(135deg, #F78F1E, #c46a0a); color:#fff; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; padding:6px 16px; border-radius:20px; letter-spacing:0.5px; text-transform:uppercase; }
+
+        .hero { background:linear-gradient(135deg, #0E1C42 0%, #1a1a3e 40%, #67308F 100%); padding:48px 24px; text-align:center; }
+        .hero h1 { font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:clamp(24px,4.5vw,36px); color:#fff; margin-bottom:8px; }
+        .hero p { color:#c8d6e8; font-size:17px; max-width:600px; margin:0 auto; }
+
+        .progress-container { max-width:800px; margin:0 auto; padding:24px 24px 0; }
+        .progress-bar-bg { background:#1a1a2e; border-radius:12px; height:14px; overflow:hidden; }
+        .progress-bar-fill { height:100%; border-radius:12px; background:linear-gradient(90deg, #55C8E8, #76C043); transition:width 0.5s ease; }
+        .progress-text { font-size:13px; color:#8899aa; margin-top:6px; text-align:right; font-weight:500; }
+
+        .content { max-width:800px; margin:0 auto; padding:24px; }
+
+        .phase-label { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#55C8E8; margin-bottom:16px; }
+
+        .scenario-box { background:#111122; border-radius:12px; padding:20px 24px; margin-bottom:24px; border:1px solid rgba(247,143,30,0.2); }
+        .scenario-label { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; color:#F78F1E; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+
+        .question-text { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:19px; color:#fff; margin-bottom:20px; line-height:1.4; }
+        .question-counter { font-size:13px; color:#8899aa; margin-bottom:8px; font-weight:500; }
+
+        .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+        @media(max-width:600px) { .options-grid { grid-template-columns:1fr; } }
+
+        .option-btn { background:#111122; border:2px solid #2a2a4a; border-radius:12px; padding:16px 18px; color:#c8d6e8; font-family:'Wix Madefor Text', sans-serif; font-size:15px; font-weight:500; cursor:pointer; text-align:left; transition:all 0.2s ease; line-height:1.5; }
+        .option-btn:hover { border-color:#55C8E8; background:#161630; }
+        .option-btn.selected { border-color:#55C8E8; background:rgba(85,200,232,0.1); color:#fff; }
+        .option-btn.correct { border-color:#76C043; background:rgba(118,192,67,0.12); color:#fff; }
+        .option-btn.incorrect { border-color:#e74c5a; background:rgba(231,76,90,0.1); color:#aaa; }
+        .option-btn.disabled { pointer-events:none; }
+
+        .feedback { border-radius:12px; padding:18px 22px; margin-top:16px; display:none; line-height:1.6; }
+        .feedback.correct { background:rgba(118,192,67,0.1); border-left:4px solid #76C043; }
+        .feedback.incorrect { background:rgba(231,76,90,0.08); border-left:4px solid #e74c5a; }
+        .feedback-title { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; margin-bottom:6px; }
+        .feedback.correct .feedback-title { color:#76C043; }
+        .feedback.incorrect .feedback-title { color:#e74c5a; }
+        .feedback p { color:#c8d6e8; font-size:14px; }
+
+        .next-btn { display:none; margin-top:20px; background:linear-gradient(135deg, #55C8E8, #0E5568); color:#fff; border:none; border-radius:10px; padding:14px 32px; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; cursor:pointer; letter-spacing:0.5px; transition:transform 0.15s; }
+        .next-btn:hover { transform:scale(1.03); }
+
+        .results-screen { display:none; text-align:center; padding:48px 24px; }
+        .score-circle { width:160px; height:160px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:42px; color:#fff; }
+        .score-label { font-size:15px; color:#8899aa; margin-bottom:8px; }
+        .score-msg { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:22px; color:#fff; margin-bottom:8px; }
+        .score-detail { color:#c8d6e8; max-width:500px; margin:0 auto 32px; }
+
+        .retry-btn { background:linear-gradient(135deg, #F78F1E, #c46a0a); color:#fff; border:none; border-radius:10px; padding:14px 36px; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; cursor:pointer; letter-spacing:0.5px; }
+        .retry-btn:hover { transform:scale(1.03); }
+
+        .hidden { display:none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header-bar">
+        <div>
+            <div class="header-title">Personal Finance &amp; Money Management Honors</div>
+            <div class="header-sub">Optima Academy Online</div>
+        </div>
+        <div class="header-badge">Activity · Week 5</div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Budget Builder Challenge</h1>
+        <p>Apply what you've learned about budgeting to real-world scenarios.</p>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-container">
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-text" id="progressText">Question 1 of 10</div>
+    </div>
+
+    <!-- QUESTION AREA -->
+    <div class="content" id="quizArea">
+        <div id="phaseLabel" class="phase-label"></div>
+        <div id="scenarioBox" class="scenario-box hidden">
+            <div class="scenario-label">📋 SCENARIO</div>
+            <div id="scenarioText"></div>
+        </div>
+        <div class="question-counter" id="questionCounter"></div>
+        <div class="question-text" id="questionText"></div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback" id="feedbackBox"><div class="feedback-title" id="feedbackTitle"></div><p id="feedbackText"></p></div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-screen" id="resultsScreen">
+        <div class="score-label">YOUR SCORE</div>
+        <div class="score-circle" id="scoreCircle"></div>
+        <div class="score-msg" id="scoreMsg"></div>
+        <div class="score-detail" id="scoreDetail"></div>
+        <button class="retry-btn" onclick="restartQuiz()">Try Again</button>
+    </div>
+
+<script>
+const questions = [
+    // PHASE 1: Classifying Expenses (Q1-4)
+    {
+        phase: "PHASE 1: CLASSIFYING EXPENSES",
+        scenario: "Jaylen is a 10th grader in Tampa with a part-time job at a pizza shop. He earns $520/month after taxes. He's trying to categorize his monthly expenses to build his first budget.",
+        question: "Jaylen pays $50/month for his phone plan. What type of expense is this?",
+        options: ["Variable expense — it changes based on how much he uses his phone", "Fixed expense — the amount stays the same each month", "Discretionary expense — he could cancel it anytime", "Luxury expense — phones are not a necessity"],
+        correct: 1,
+        correctFeedback: "A phone plan with a set monthly rate is a fixed expense — the cost is predictable and doesn't change month to month. This makes it easy to plan for in a budget.",
+        incorrectFeedback: "A phone plan at a set rate ($50/month) is a fixed expense because the amount stays the same each billing cycle. Variable expenses, by contrast, fluctuate based on your choices or usage."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Jaylen spent $35 on gas last week but $50 the week before. What type of expense is gas?",
+        options: ["Fixed expense — he always needs gas for his car", "Variable expense — the amount changes depending on usage", "Savings expense — it's an investment in transportation", "Recurring expense — it happens every week"],
+        correct: 1,
+        correctFeedback: "Gas is a variable expense because the amount fluctuates from week to week based on how much Jaylen drives. Even though he buys gas regularly, the cost isn't predictable or fixed.",
+        incorrectFeedback: "Even though Jaylen buys gas regularly, the amount changes based on how much he drives, making it a variable expense. Fixed expenses are the same amount each month (like a subscription)."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Which of the following is the BEST reason to identify your fixed expenses first when building a budget?",
+        options: ["Fixed expenses are always more expensive than variable ones", "You can negotiate fixed expenses down more easily", "Fixed expenses are predictable, so you know exactly what's committed", "Fixed expenses are optional and can be cut first"],
+        correct: 2,
+        correctFeedback: "Identifying fixed expenses first tells you how much of your income is already committed before you make any choices. This is the foundation of any budget because these amounts are locked in.",
+        incorrectFeedback: "Fixed expenses should be identified first because they're predictable — you know exactly how much is committed each month. This creates a clear picture of what's left for variable spending and savings."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Jaylen wants to reduce his spending this month. Which strategy would give him the most control right away?",
+        options: ["Cancel his phone plan to eliminate a fixed expense", "Reduce variable expenses like eating out and entertainment", "Switch to a different budgeting app", "Wait until next month and spend less overall"],
+        correct: 1,
+        correctFeedback: "Variable expenses are the most flexible part of your budget. Jaylen can immediately choose to cook at home instead of eating out or skip a movie night — no contracts to cancel or penalties to pay.",
+        incorrectFeedback: "Variable expenses (eating out, entertainment, clothing) are where you have the most immediate control. Cutting a fixed expense like a phone plan often involves contracts or penalties, while variable spending can be adjusted right away."
+    },
+    // PHASE 2: Choosing a Budget Method (Q5-7)
+    {
+        phase: "PHASE 2: CHOOSING A BUDGET METHOD",
+        scenario: "Aisha earns $800/month working at a retail store in Miami. She just opened her first savings account and wants to start budgeting seriously. She's comparing the 50/30/20 rule and zero-based budgeting.",
+        question: "If Aisha uses the 50/30/20 rule, how much should she allocate to her savings and debt repayment category?",
+        options: ["$240 (30% of $800)", "$160 (20% of $800)", "$400 (50% of $800)", "$80 (10% of $800)"],
+        correct: 1,
+        correctFeedback: "The 50/30/20 rule puts 20% toward savings and extra debt payments. For Aisha, that's $800 × 0.20 = $160/month. That's $1,920 saved in a year just from following this guideline!",
+        incorrectFeedback: "In the 50/30/20 rule, savings and debt repayment get 20%. So $800 × 0.20 = $160. The 50% ($400) goes to needs, and 30% ($240) goes to wants."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Aisha notices she keeps overspending on wants like clothes and concert tickets. Which budgeting method would help her control this the most?",
+        options: ["The 50/30/20 rule, because it sets a clear 30% cap on wants", "Zero-based budgeting, because every dollar is assigned a specific job", "The envelope system, because she physically can't overspend a category", "Any method works equally well for controlling overspending"],
+        correct: 2,
+        correctFeedback: "The envelope system creates a hard limit — when the cash (or digital allocation) in a category runs out, spending stops. This physical or visual boundary is the most effective method for someone who struggles with impulse spending.",
+        incorrectFeedback: "While all methods can help, the envelope system is specifically designed to prevent overspending. Once the envelope is empty, you're done in that category — there's no wiggle room to borrow from other areas."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "In a zero-based budget, Aisha assigns $400 to needs, $200 to wants, $150 to savings, and $30 to an emergency fund. What's wrong with this budget?",
+        options: ["She's saving too much money", "She should spend more on wants", "She has $20 unassigned — her budget doesn't zero out", "Nothing — this is a perfect zero-based budget"],
+        correct: 2,
+        correctFeedback: "In a zero-based budget, income minus all planned spending must equal zero. Aisha's assignments total $780, but she earns $800 — leaving $20 unaccounted for. She needs to assign that $20 somewhere (savings, gas, etc.).",
+        incorrectFeedback: "Check the math: $400 + $200 + $150 + $30 = $780. Aisha earns $800, so $20 is unassigned. In zero-based budgeting, every dollar must have a job — her budget needs to total exactly $800."
+    },
+    // PHASE 3: Building a Real Budget (Q8-10)
+    {
+        phase: "PHASE 3: BUILDING A REAL BUDGET",
+        scenario: "Carlos is a senior in Tallahassee earning $700/month from tutoring and a part-time warehouse job. His expenses: rent (splitting with family) $150, car insurance $95, phone $45, gas ~$70, food ~$130, entertainment ~$50, gym membership $25. He wants to save at least $100/month.",
+        question: "What are Carlos's total fixed expenses?",
+        options: ["$150 (just the rent)", "$315 (rent + insurance + phone + gym)", "$290 (rent + insurance + phone)", "$385 (rent + insurance + phone + gas + gym)"],
+        correct: 1,
+        correctFeedback: "Carlos's fixed expenses are rent ($150), car insurance ($95), phone ($45), and gym membership ($25) = $315. These amounts don't change month to month. Gas and food are variable because the amounts fluctuate.",
+        incorrectFeedback: "Fixed expenses stay the same each month: rent ($150) + car insurance ($95) + phone ($45) + gym ($25) = $315. Gas and food are variable because they fluctuate. Fixed ≠ necessary — it means the amount is predictable."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "After fixed expenses ($315) and his savings goal ($100), Carlos has $285 left for variable spending. His variable expenses average $250. What should he do with the extra $35?",
+        options: ["Spend it on entertainment since he's under budget", "Assign it a purpose — add to savings, emergency fund, or a specific goal", "Leave it unplanned in case something comes up", "Reduce his work hours since he has extra money"],
+        correct: 1,
+        correctFeedback: "In good budgeting, every dollar should have a job. Carlos could add the $35 to his emergency fund, save for college expenses, or create a 'fun fund.' The point is that it should be intentional, not left to chance.",
+        incorrectFeedback: "Leaving money unassigned is how budgets break down. The best approach is to give that $35 a purpose — boost savings, start an emergency fund, or save for a specific goal. Intentional spending is the core of budgeting."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Carlos gets his hours cut and now earns $550/month. Which is the BEST first step to adjust his budget?",
+        options: ["Cancel his gym membership and phone plan immediately", "Review variable expenses first and reduce where he has flexibility", "Stop saving until his income goes back up", "Borrow money to cover the difference"],
+        correct: 1,
+        correctFeedback: "When income drops, start by reviewing variable expenses — these are the easiest to adjust quickly. Carlos could reduce food costs by cooking more, cut entertainment, or drive less. Savings should be maintained if possible, even at a smaller amount.",
+        incorrectFeedback: "Variable expenses are the first place to adjust because they're flexible. Carlos can immediately reduce food, entertainment, and gas spending. Cutting savings entirely or canceling contracts should be a last resort, not a first step."
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+    const q = questions[currentQuestion];
+
+    // Progress
+    document.getElementById('progressFill').style.width = ((currentQuestion) / questions.length * 100) + '%';
+    document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+
+    // Phase label
+    const phaseLabel = document.getElementById('phaseLabel');
+    if (q.phase) {
+        phaseLabel.textContent = q.phase;
+        phaseLabel.classList.remove('hidden');
+    } else {
+        phaseLabel.classList.add('hidden');
+    }
+
+    // Scenario
+    const scenarioBox = document.getElementById('scenarioBox');
+    if (q.scenario) {
+        document.getElementById('scenarioText').innerHTML = `<p style="color:#c8d6e8; margin:0;">${q.scenario}</p>`;
+        scenarioBox.classList.remove('hidden');
+    } else {
+        scenarioBox.classList.add('hidden');
+    }
+
+    // Question
+    document.getElementById('questionCounter').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+    document.getElementById('questionText').textContent = q.question;
+
+    // Options
+    const grid = document.getElementById('optionsGrid');
+    grid.innerHTML = '';
+    q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => selectAnswer(i);
+        grid.appendChild(btn);
+    });
+
+    // Reset
+    document.getElementById('feedbackBox').style.display = 'none';
+    document.getElementById('nextBtn').style.display = 'none';
+    answered = false;
+}
+
+function selectAnswer(index) {
+    if (answered) return;
+    answered = true;
+
+    const q = questions[currentQuestion];
+    const buttons = document.querySelectorAll('.option-btn');
+    const isCorrect = index === q.correct;
+
+    buttons.forEach((btn, i) => {
+        btn.classList.add('disabled');
+        if (i === q.correct) btn.classList.add('correct');
+        if (i === index && !isCorrect) btn.classList.add('incorrect');
+    });
+
+    if (isCorrect) score++;
+
+    const fb = document.getElementById('feedbackBox');
+    fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    document.getElementById('feedbackTitle').textContent = isCorrect ? '✅ Correct!' : '❌ Not Quite';
+    document.getElementById('feedbackText').textContent = isCorrect ? q.correctFeedback : q.incorrectFeedback;
+    fb.style.display = 'block';
+
+    document.getElementById('nextBtn').style.display = 'inline-block';
+    document.getElementById('nextBtn').textContent = currentQuestion < questions.length - 1 ? 'Next Question →' : 'See Results →';
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion >= questions.length) {
+        showResults();
+    } else {
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function showResults() {
+    document.getElementById('quizArea').style.display = 'none';
+    document.querySelector('.progress-container').style.display = 'none';
+
+    const pct = Math.round((score / questions.length) * 100);
+    let gradient, msg, detail;
+
+    if (pct >= 80) {
+        gradient = 'linear-gradient(135deg, #76C043, #4a8a20)';
+        msg = 'Excellent Work!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). You have a strong understanding of budgeting concepts. You know how to classify expenses, choose the right budgeting method, and build a real spending plan.`;
+    } else if (pct >= 60) {
+        gradient = 'linear-gradient(135deg, #C7922C, #a07520)';
+        msg = 'Good Effort!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). You've got a solid foundation, but review the sections on budget methods and expense classification to sharpen your skills.`;
+    } else {
+        gradient = 'linear-gradient(135deg, #e74c5a, #b83040)';
+        msg = 'Keep Practicing!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). Revisit the Week 5 reading to strengthen your understanding of fixed vs. variable expenses and budgeting methods, then try again.`;
+    }
+
+    const screen = document.getElementById('resultsScreen');
+    screen.style.display = 'block';
+    document.getElementById('scoreCircle').style.background = gradient;
+    document.getElementById('scoreCircle').textContent = `${pct}%`;
+    document.getElementById('scoreMsg').textContent = msg;
+    document.getElementById('scoreDetail').textContent = detail;
+
+    document.getElementById('progressFill').style.width = '100%';
+}
+
+function restartQuiz() {
+    currentQuestion = 0;
+    score = 0;
+    document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('quizArea').style.display = 'block';
+    document.querySelector('.progress-container').style.display = 'block';
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Start
+renderQuestion();
+</script>
+</body>
+</html>

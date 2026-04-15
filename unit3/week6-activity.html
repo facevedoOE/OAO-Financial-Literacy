@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 6 Activity: Smart Consumer Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@700;800&family=Wix+Madefor+Text:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#0a0a14; color:#e2e8f0; font-family:'Wix Madefor Text', sans-serif; font-weight:400; line-height:1.7; font-size:16px; }
+
+        .header-bar { background:#0E1C42; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+        .header-title { font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:18px; color:#fff; letter-spacing:0.5px; }
+        .header-sub { font-size:13px; color:#55C8E8; font-weight:500; }
+        .header-badge { background:linear-gradient(135deg, #F78F1E, #c46a0a); color:#fff; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; padding:6px 16px; border-radius:20px; letter-spacing:0.5px; text-transform:uppercase; }
+
+        .hero { background:linear-gradient(135deg, #0E1C42 0%, #1a1a3e 40%, #67308F 100%); padding:48px 24px; text-align:center; }
+        .hero h1 { font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:clamp(24px,4.5vw,36px); color:#fff; margin-bottom:8px; }
+        .hero p { color:#c8d6e8; font-size:17px; max-width:600px; margin:0 auto; }
+
+        .progress-container { max-width:800px; margin:0 auto; padding:24px 24px 0; }
+        .progress-bar-bg { background:#1a1a2e; border-radius:12px; height:14px; overflow:hidden; }
+        .progress-bar-fill { height:100%; border-radius:12px; background:linear-gradient(90deg, #55C8E8, #76C043); transition:width 0.5s ease; }
+        .progress-text { font-size:13px; color:#8899aa; margin-top:6px; text-align:right; font-weight:500; }
+
+        .content { max-width:800px; margin:0 auto; padding:24px; }
+
+        .phase-label { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#55C8E8; margin-bottom:16px; }
+
+        .scenario-box { background:#111122; border-radius:12px; padding:20px 24px; margin-bottom:24px; border:1px solid rgba(247,143,30,0.2); }
+        .scenario-label { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; color:#F78F1E; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+
+        .question-text { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:19px; color:#fff; margin-bottom:20px; line-height:1.4; }
+        .question-counter { font-size:13px; color:#8899aa; margin-bottom:8px; font-weight:500; }
+
+        .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+        @media(max-width:600px) { .options-grid { grid-template-columns:1fr; } }
+
+        .option-btn { background:#111122; border:2px solid #2a2a4a; border-radius:12px; padding:16px 18px; color:#c8d6e8; font-family:'Wix Madefor Text', sans-serif; font-size:15px; font-weight:500; cursor:pointer; text-align:left; transition:all 0.2s ease; line-height:1.5; }
+        .option-btn:hover { border-color:#55C8E8; background:#161630; }
+        .option-btn.selected { border-color:#55C8E8; background:rgba(85,200,232,0.1); color:#fff; }
+        .option-btn.correct { border-color:#76C043; background:rgba(118,192,67,0.12); color:#fff; }
+        .option-btn.incorrect { border-color:#e74c5a; background:rgba(231,76,90,0.1); color:#aaa; }
+        .option-btn.disabled { pointer-events:none; }
+
+        .feedback { border-radius:12px; padding:18px 22px; margin-top:16px; display:none; line-height:1.6; }
+        .feedback.correct { background:rgba(118,192,67,0.1); border-left:4px solid #76C043; }
+        .feedback.incorrect { background:rgba(231,76,90,0.08); border-left:4px solid #e74c5a; }
+        .feedback-title { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; margin-bottom:6px; }
+        .feedback.correct .feedback-title { color:#76C043; }
+        .feedback.incorrect .feedback-title { color:#e74c5a; }
+        .feedback p { color:#c8d6e8; font-size:14px; }
+
+        .next-btn { display:none; margin-top:20px; background:linear-gradient(135deg, #55C8E8, #0E5568); color:#fff; border:none; border-radius:10px; padding:14px 32px; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; cursor:pointer; letter-spacing:0.5px; transition:transform 0.15s; }
+        .next-btn:hover { transform:scale(1.03); }
+
+        .results-screen { display:none; text-align:center; padding:48px 24px; }
+        .score-circle { width:160px; height:160px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:42px; color:#fff; }
+        .score-label { font-size:15px; color:#8899aa; margin-bottom:8px; }
+        .score-msg { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:22px; color:#fff; margin-bottom:8px; }
+        .score-detail { color:#c8d6e8; max-width:500px; margin:0 auto 32px; }
+
+        .retry-btn { background:linear-gradient(135deg, #F78F1E, #c46a0a); color:#fff; border:none; border-radius:10px; padding:14px 36px; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; cursor:pointer; letter-spacing:0.5px; }
+        .retry-btn:hover { transform:scale(1.03); }
+
+        .hidden { display:none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header-bar">
+        <div>
+            <div class="header-title">Personal Finance &amp; Money Management Honors</div>
+            <div class="header-sub">Optima Academy Online</div>
+        </div>
+        <div class="header-badge">Activity · Week 6</div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+        <h1>Smart Consumer Challenge</h1>
+        <p>Test your ability to analyze purchases, spot scams, and protect your wallet.</p>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-container">
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-text" id="progressText">Question 1 of 10</div>
+    </div>
+
+    <!-- QUESTION AREA -->
+    <div class="content" id="quizArea">
+        <div id="phaseLabel" class="phase-label"></div>
+        <div id="scenarioBox" class="scenario-box hidden">
+            <div class="scenario-label">📋 SCENARIO</div>
+            <div id="scenarioText"></div>
+        </div>
+        <div class="question-counter" id="questionCounter"></div>
+        <div class="question-text" id="questionText"></div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback" id="feedbackBox"><div class="feedback-title" id="feedbackTitle"></div><p id="feedbackText"></p></div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="results-screen" id="resultsScreen">
+        <div class="score-label">YOUR SCORE</div>
+        <div class="score-circle" id="scoreCircle"></div>
+        <div class="score-msg" id="scoreMsg"></div>
+        <div class="score-detail" id="scoreDetail"></div>
+        <button class="retry-btn" onclick="restartQuiz()">Try Again</button>
+    </div>
+
+<script>
+const questions = [
+    // PHASE 1: Cost-Benefit & Comparison Shopping (Q1-4)
+    {
+        phase: "PHASE 1: SMART SHOPPING DECISIONS",
+        scenario: "Tiana is a 10th grader in Orlando. She works part-time and earns $500/month. She wants to buy a new laptop for school but is torn between two options.",
+        question: "Laptop A costs $450 and has great reviews but no warranty. Laptop B costs $550 with a 2-year warranty. Tiana has $500 in savings. Which factor is MOST important in her cost-benefit analysis?",
+        options: ["The brand name of each laptop", "The total cost of ownership including potential repair costs", "Which laptop her friends recommend", "Whichever one is available for next-day shipping"],
+        correct: 1,
+        correctFeedback: "Total cost of ownership looks beyond the sticker price. Laptop A might save $100 now, but if it breaks without a warranty, Tiana could pay far more in repairs. The $550 laptop with a warranty may actually cost less over time.",
+        incorrectFeedback: "In a cost-benefit analysis, total cost of ownership is the most important factor. This includes the purchase price PLUS ongoing and potential future costs like repairs, accessories, and software. A warranty protects against unexpected expenses."
+    },
+    {
+        phase: "",
+        scenario: "Tiana is at the grocery store buying laundry detergent. She sees three options on the shelf.",
+        question: "Brand X: 50 oz for $8.99 | Brand Y: 100 oz for $14.99 | Brand Z: 32 oz for $5.49. Which is the best value per ounce?",
+        options: ["Brand X at $0.18/oz", "Brand Y at $0.15/oz", "Brand Z at $0.17/oz", "They're all about the same value"],
+        correct: 1,
+        correctFeedback: "Brand Y has the lowest unit price at $0.15/oz ($14.99 ÷ 100). Brand Z is $0.17/oz and Brand X is $0.18/oz. Buying the larger size saves Tiana about $0.03 per ounce — that adds up over many purchases!",
+        incorrectFeedback: "Calculate each unit price: Brand X = $8.99 ÷ 50 = $0.18/oz. Brand Y = $14.99 ÷ 100 = $0.15/oz. Brand Z = $5.49 ÷ 32 = $0.17/oz. Brand Y has the lowest unit price and is the best value."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "When comparison shopping, which of the following is NOT a useful factor to consider?",
+        options: ["Return policy and warranty coverage", "Reviews from verified purchasers", "How many of your friends own the product", "Total cost including shipping and tax"],
+        correct: 2,
+        correctFeedback: "While word-of-mouth can be helpful, popularity among friends isn't a reliable measure of quality or value. Smart comparison shopping focuses on objective factors: price, quality, warranties, return policies, and verified reviews.",
+        incorrectFeedback: "How many friends own a product isn't a reliable comparison metric — it reflects popularity, not necessarily quality or value. Useful comparison factors include price, reviews from verified buyers, return policies, and total cost with shipping and tax."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "What is the opportunity cost of spending $80 on concert tickets?",
+        options: ["The $80 you paid for the tickets", "The enjoyment you get from the concert", "The other things you could have done with that $80", "The cost of gas to drive to the concert"],
+        correct: 2,
+        correctFeedback: "Opportunity cost is the value of the next best alternative you give up. If that $80 could have gone to savings, new clothes, or a textbook, those forgone options represent the opportunity cost — not the ticket price itself.",
+        incorrectFeedback: "Opportunity cost isn't the money you spent — it's what you gave up by not spending that money elsewhere. The $80 concert ticket means $80 that couldn't go to savings, food, or something else. That missed alternative is the opportunity cost."
+    },
+    // PHASE 2: Consumer Rights (Q5-7)
+    {
+        phase: "PHASE 2: CONSUMER RIGHTS & RESPONSIBILITIES",
+        scenario: "Marcus bought a pair of Bluetooth earbuds online for $35. After three days, the right earbud stopped working completely. The seller's website says 'All sales final — no returns.'",
+        question: "Does Marcus have any recourse even though the seller says 'no returns'?",
+        options: ["No — the seller's policy overrides everything", "Yes — products must work as advertised under consumer protection law", "Only if he paid with cash", "No — $35 is too small for a legal complaint"],
+        correct: 1,
+        correctFeedback: "Consumer protection laws require products to work as described. A 'no returns' policy doesn't override your right to a product that actually functions. Marcus can dispute the charge with his bank/credit card or file a complaint with the FTC.",
+        incorrectFeedback: "A seller can't override consumer protection law with a store policy. The right to redress means Marcus can seek a remedy for a defective product regardless of the seller's stated return policy. He can file a bank dispute or FTC complaint."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Which consumer right protects you from companies that make false claims about their products?",
+        options: ["Right to Safety", "Right to Be Informed", "Right to Choose", "Right to Privacy"],
+        correct: 1,
+        correctFeedback: "The Right to Be Informed means companies must be truthful in their advertising and product labeling. If a company claims a product does something it doesn't, they're violating your right to accurate information — and that's illegal.",
+        incorrectFeedback: "The Right to Be Informed protects consumers from false advertising and misleading product claims. Companies are legally required to provide truthful information about what their products do, what they contain, and how they work."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Which of the following is a consumer RESPONSIBILITY, not a right?",
+        options: ["Getting a refund for a broken product", "Receiving truthful product information", "Reading the terms and conditions before purchasing", "Being able to file a complaint against a company"],
+        correct: 2,
+        correctFeedback: "Reading terms and conditions is your responsibility as a consumer. While companies must provide truthful information (your right), it's on you to actually read and understand what you're agreeing to before you buy or subscribe.",
+        incorrectFeedback: "Refunds, truthful info, and complaint filing are all consumer rights. But reading the terms and conditions? That's your responsibility. Smart consumers take time to understand return policies, subscription terms, and cancellation rules before committing."
+    },
+    // PHASE 3: Spotting Scams (Q8-10)
+    {
+        phase: "PHASE 3: SPOTTING SCAMS & PREDATORY PRACTICES",
+        scenario: "Sofia, a junior in St. Petersburg, receives a text message: 'URGENT: Your bank account has been compromised! Click here to verify your identity immediately: www.fl0rida-bank-secure.net'",
+        question: "What is the biggest red flag in this message?",
+        options: ["The word 'URGENT' — banks always use calm language", "The misspelled URL with a zero instead of an 'o'", "Banks never send text messages to customers", "The message came during business hours"],
+        correct: 1,
+        correctFeedback: "Phishing messages often use slightly misspelled URLs to mimic legitimate websites. 'fl0rida' with a zero instead of an 'o' is a classic tactic to trick people who aren't looking closely. Real banks also never ask you to verify your identity through a text link.",
+        incorrectFeedback: "The misspelled URL ('fl0rida' with a zero) is the biggest red flag — phishing sites deliberately create addresses that look almost identical to real ones. Banks may send texts, but they never include links asking you to enter personal information."
+    },
+    {
+        phase: "",
+        scenario: "A DM on social media says: 'We want you to promote our brand! Just pay $20 shipping for your free products. Send payment via Cash App to @branddeals2026.'",
+        question: "Which combination of red flags makes this most likely a scam?",
+        options: ["The product is free and they use social media", "They want payment via Cash App and the influencer pays the brand", "They didn't mention the specific product or brand name", "The message was a DM instead of a public post"],
+        correct: 1,
+        correctFeedback: "Two major red flags: (1) Legitimate brands never ask influencers to pay — they send products at no cost. (2) Payment apps like Cash App offer no buyer protection. Once you send money, it's gone. Real brand deals use secure payment methods or simply ship products.",
+        incorrectFeedback: "The biggest red flags are: (1) the influencer is asked to PAY the brand (real deals are the opposite) and (2) payment via Cash App, which has no buyer protection. Legitimate companies use professional invoicing and never ask promoters to send money first."
+    },
+    {
+        phase: "",
+        scenario: "Devon signs up for a 'free 7-day trial' of a music production app. He enters his debit card number as required. Two weeks later, he sees a $49.99 charge on his bank statement.",
+        question: "What should Devon have done differently to protect himself?",
+        options: ["Never sign up for any free trials", "Read the subscription terms and set a reminder to cancel before the trial ended", "Only used the app on weekends to stay within free limits", "Called the company after seeing the charge to get the free trial extended"],
+        correct: 1,
+        correctFeedback: "Free trials that require payment info almost always auto-charge when the trial ends. The smart move is to read the terms carefully AND set a calendar reminder to cancel before the trial period expires. Using a credit card (not debit) also provides better dispute options.",
+        incorrectFeedback: "Free trials aren't inherently bad, but you must read the terms and set a reminder to cancel before the billing starts. Devon's mistake was not reading when and how he'd be charged, not tracking the trial deadline, and using a debit card instead of a credit card."
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+    const q = questions[currentQuestion];
+
+    document.getElementById('progressFill').style.width = ((currentQuestion) / questions.length * 100) + '%';
+    document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+
+    const phaseLabel = document.getElementById('phaseLabel');
+    if (q.phase) {
+        phaseLabel.textContent = q.phase;
+        phaseLabel.classList.remove('hidden');
+    } else {
+        phaseLabel.classList.add('hidden');
+    }
+
+    const scenarioBox = document.getElementById('scenarioBox');
+    if (q.scenario) {
+        document.getElementById('scenarioText').innerHTML = `<p style="color:#c8d6e8; margin:0;">${q.scenario}</p>`;
+        scenarioBox.classList.remove('hidden');
+    } else {
+        scenarioBox.classList.add('hidden');
+    }
+
+    document.getElementById('questionCounter').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+    document.getElementById('questionText').textContent = q.question;
+
+    const grid = document.getElementById('optionsGrid');
+    grid.innerHTML = '';
+    q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => selectAnswer(i);
+        grid.appendChild(btn);
+    });
+
+    document.getElementById('feedbackBox').style.display = 'none';
+    document.getElementById('nextBtn').style.display = 'none';
+    answered = false;
+}
+
+function selectAnswer(index) {
+    if (answered) return;
+    answered = true;
+
+    const q = questions[currentQuestion];
+    const buttons = document.querySelectorAll('.option-btn');
+    const isCorrect = index === q.correct;
+
+    buttons.forEach((btn, i) => {
+        btn.classList.add('disabled');
+        if (i === q.correct) btn.classList.add('correct');
+        if (i === index && !isCorrect) btn.classList.add('incorrect');
+    });
+
+    if (isCorrect) score++;
+
+    const fb = document.getElementById('feedbackBox');
+    fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    document.getElementById('feedbackTitle').textContent = isCorrect ? '✅ Correct!' : '❌ Not Quite';
+    document.getElementById('feedbackText').textContent = isCorrect ? q.correctFeedback : q.incorrectFeedback;
+    fb.style.display = 'block';
+
+    document.getElementById('nextBtn').style.display = 'inline-block';
+    document.getElementById('nextBtn').textContent = currentQuestion < questions.length - 1 ? 'Next Question →' : 'See Results →';
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion >= questions.length) {
+        showResults();
+    } else {
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function showResults() {
+    document.getElementById('quizArea').style.display = 'none';
+    document.querySelector('.progress-container').style.display = 'none';
+
+    const pct = Math.round((score / questions.length) * 100);
+    let gradient, msg, detail;
+
+    if (pct >= 80) {
+        gradient = 'linear-gradient(135deg, #76C043, #4a8a20)';
+        msg = 'Excellent Work!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). You're a sharp consumer! You can spot scams, compare prices effectively, and understand your rights as a buyer.`;
+    } else if (pct >= 60) {
+        gradient = 'linear-gradient(135deg, #C7922C, #a07520)';
+        msg = 'Good Effort!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). You have solid consumer awareness, but review the sections on scam identification and consumer rights to sharpen your edge.`;
+    } else {
+        gradient = 'linear-gradient(135deg, #e74c5a, #b83040)';
+        msg = 'Keep Practicing!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). Revisit the Week 6 reading to build your skills in comparison shopping, consumer rights, and scam awareness, then try again.`;
+    }
+
+    const screen = document.getElementById('resultsScreen');
+    screen.style.display = 'block';
+    document.getElementById('scoreCircle').style.background = gradient;
+    document.getElementById('scoreCircle').textContent = `${pct}%`;
+    document.getElementById('scoreMsg').textContent = msg;
+    document.getElementById('scoreDetail').textContent = detail;
+
+    document.getElementById('progressFill').style.width = '100%';
+}
+
+function restartQuiz() {
+    currentQuestion = 0;
+    score = 0;
+    document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('quizArea').style.display = 'block';
+    document.querySelector('.progress-container').style.display = 'block';
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
