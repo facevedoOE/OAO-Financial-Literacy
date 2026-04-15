@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Week 1 Activity: Financial Decision Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&family=Wix+Madefor+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a14;color:#e2e8f0;font-family:'Wix Madefor Text',sans-serif;font-size:15px;line-height:1.7}
+.header{background:#0E1C42;padding:14px 24px;display:flex;align-items:center;gap:14px;border-bottom:2px solid #55C8E8}
+.header-title{font-family:'Wix Madefor Display',sans-serif;font-size:14px;font-weight:700;color:#fff}
+.header-sub{font-size:11px;color:#55C8E8}
+.badge{margin-left:auto;background:#F78F1E;color:#fff;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;font-family:'Wix Madefor Display',sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:28px 20px 60px}
+.hero{background:linear-gradient(135deg,#0E1C42,#1a2d5a);border-radius:16px;padding:32px;margin-bottom:28px;border:1px solid rgba(85,200,232,0.25)}
+.hero h1{font-family:'Wix Madefor Display',sans-serif;font-size:26px;font-weight:800;color:#a0d4f0;margin-bottom:8px}
+.hero p{color:#94a3b8;font-size:14px}
+.progress-bar{background:#111122;border-radius:14px;padding:18px 24px;margin-bottom:24px;border:1px solid rgba(255,255,255,0.06)}
+.progress-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#55C8E8;font-family:'Wix Madefor Display',sans-serif;margin-bottom:10px}
+.progress-track{background:rgba(255,255,255,0.06);border-radius:20px;height:10px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,#55C8E8,#76C043);height:100%;border-radius:20px;transition:width 0.5s ease}
+.progress-text{font-size:12px;color:#94a3b8;margin-top:6px;text-align:right}
+.card{background:#111122;border-radius:14px;padding:28px;margin-bottom:24px;border:1px solid rgba(255,255,255,0.06)}
+.card h2{font-family:'Wix Madefor Display',sans-serif;font-size:20px;font-weight:700;color:#e2e8f0;margin-bottom:6px}
+.card-phase{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#C7922C;font-family:'Wix Madefor Display',sans-serif;margin-bottom:6px}
+.card p.desc{color:#c8d6e8;font-size:14px;margin-bottom:18px}
+.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.option-btn{background:rgba(85,200,232,0.06);border:2px solid rgba(85,200,232,0.15);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;text-align:left;color:#e2e8f0;font-family:'Wix Madefor Text',sans-serif;font-size:14px}
+.option-btn:hover{border-color:#55C8E8;background:rgba(85,200,232,0.12);transform:translateY(-1px)}
+.option-btn.selected{border-color:#55C8E8;background:rgba(85,200,232,0.15);box-shadow:0 0 12px rgba(85,200,232,0.2)}
+.option-btn.correct{border-color:#76C043;background:rgba(118,192,67,0.15)}
+.option-btn.incorrect{border-color:#ef4444;background:rgba(239,68,68,0.1)}
+.option-btn.disabled{pointer-events:none;opacity:0.7}
+.feedback{border-radius:10px;padding:16px 20px;margin-top:16px;display:none;font-size:14px}
+.feedback.correct{background:rgba(118,192,67,0.1);border:1px solid rgba(118,192,67,0.3);color:#a3e635}
+.feedback.incorrect{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#fca5a5}
+.next-btn{background:linear-gradient(135deg,#55C8E8,#0E5568);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Wix Madefor Display',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;display:none;transition:all 0.2s}
+.next-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(85,200,232,0.3)}
+.scenario-box{background:rgba(0,0,0,0.25);border-radius:12px;padding:20px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.05)}
+.scenario-label{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#F78F1E;margin-bottom:6px}
+.scenario-text{color:#e2e8f0;font-size:14px}
+.results{background:linear-gradient(135deg,#0E1C42,#1a2d5a);border-radius:16px;padding:36px;margin-bottom:28px;border:1px solid rgba(85,200,232,0.25);text-align:center;display:none}
+.results h2{font-family:'Wix Madefor Display',sans-serif;font-size:28px;font-weight:800;color:#a0d4f0;margin-bottom:12px}
+.score-circle{width:120px;height:120px;border-radius:50%;margin:20px auto;display:flex;align-items:center;justify-content:center;font-family:'Wix Madefor Display',sans-serif;font-size:36px;font-weight:800;color:#fff}
+.score-high{background:linear-gradient(135deg,#76C043,#4a8a25);border:3px solid rgba(118,192,67,0.5)}
+.score-mid{background:linear-gradient(135deg,#C7922C,#9a7020);border:3px solid rgba(199,146,44,0.5)}
+.score-low{background:linear-gradient(135deg,#ef4444,#b91c1c);border:3px solid rgba(239,68,68,0.5)}
+.retry-btn{background:linear-gradient(135deg,#C7922C,#9a7020);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Wix Madefor Display',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;transition:all 0.2s}
+.retry-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(199,146,44,0.3)}
+.hidden{display:none!important}
+@media(max-width:600px){.option-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-title">Personal Finance &amp; Money Management</div>
+    <div class="header-sub">Optima Academy Online</div>
+  </div>
+  <div class="badge">Activity · Week 1</div>
+</div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Financial Decision Simulator</h1>
+  <p>Put your decision-making skills to the test. You'll face real-world financial scenarios that teens actually encounter — classify needs and wants, apply the DECIDE model, and spot emotional vs. rational thinking.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar">
+  <div class="progress-label">YOUR PROGRESS</div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-text" id="progressText">Question 0 of 10</div>
+</div>
+
+<!-- QUESTION CONTAINER -->
+<div id="questionContainer"></div>
+
+<!-- RESULTS -->
+<div class="results" id="results">
+  <h2 id="resultsTitle">Activity Complete!</h2>
+  <div class="score-circle" id="scoreCircle">0%</div>
+  <p id="resultsMsg" style="color:#c8d6e8;font-size:15px;margin:16px 0;max-width:500px;margin-left:auto;margin-right:auto;"></p>
+  <p id="scoreBreakdown" style="color:#94a3b8;font-size:13px;margin-bottom:16px;"></p>
+  <button class="retry-btn" onclick="restartActivity()">Try Again</button>
+</div>
+
+</div>
+
+<script>
+const questions = [
+  // PHASE 1: NEEDS VS WANTS (Q1-4)
+  {
+    phase: "PHASE 1: NEEDS VS. WANTS",
+    title: "Classify the Item",
+    scenario: "You just got your first part-time job paycheck: $340. You're making a list of things to spend it on. Classify each item.",
+    question: "Rent payment for your share of a family phone plan ($45/month) — your parents require you to pay it to keep your phone active for safety and school communication.",
+    options: ["Need — essential for safety and school","Want — phones are a luxury","Need — everyone has a phone","Want — you could use a landline"],
+    correct: 0,
+    correctFeedback: "Correct! In this context, the phone plan is a need — your parents require it for safety and school access. The key was the context: it's not just any phone plan, it's required for basic functioning.",
+    incorrectFeedback: "Not quite. Look at the context clues: parents require it for safety, and it's needed for school communication. That makes it a need in this situation, not a luxury."
+  },
+  {
+    phase: "PHASE 1: NEEDS VS. WANTS",
+    title: "Classify the Item",
+    scenario: "Continuing with your $340 paycheck...",
+    question: "A $65 pair of limited-edition sneakers that your favorite YouTuber is promoting. Your current shoes are in good condition.",
+    options: ["Need — you need shoes","Want — your current shoes work fine","Need — they're limited edition so it's now or never","Want — but it's a smart investment"],
+    correct: 1,
+    correctFeedback: "You got it! Since your current shoes are fine, this is a want driven by social influence and scarcity marketing ('limited edition'). Neither popularity nor scarcity turns a want into a need.",
+    incorrectFeedback: "Think again — the scenario says your current shoes are in good condition. You have functional footwear (need met). The new pair is driven by social influence and marketing, making it a want."
+  },
+  {
+    phase: "PHASE 1: NEEDS VS. WANTS",
+    title: "The Gray Area",
+    scenario: "Your school requires all students to have a laptop for coursework. Yours broke last week.",
+    question: "Which purchase best balances needs and wants?",
+    options: ["A $2,000 gaming laptop with RGB lighting","A $400 Chromebook that meets school specs","Borrow a friend's old tablet indefinitely","Skip the purchase — use school library computers only"],
+    correct: 1,
+    correctFeedback: "Smart choice! A laptop is a need (school requires it), but the $400 Chromebook that meets specs satisfies the need without overspending on wants (gaming features, premium design). You met the need at the right price point.",
+    incorrectFeedback: "A laptop is a genuine need here (school requires it), so skipping isn't practical. But a $2,000 gaming laptop goes far beyond the need. The Chromebook that meets school specs satisfies the need without overpaying for wants."
+  },
+  {
+    phase: "PHASE 1: NEEDS VS. WANTS",
+    title: "Tricky Scenario",
+    scenario: "It's summer and you're working at a pool. You need sunscreen, but you're choosing between a $7 store brand (SPF 50) and a $28 brand-name version (SPF 50) endorsed by a celebrity.",
+    question: "What's the smartest financial move?",
+    options: ["Buy the $28 brand — celebrity endorsement means better quality","Buy the $7 store brand — same SPF, same protection","Skip sunscreen — save the money entirely","Buy both and compare them"],
+    correct: 1,
+    correctFeedback: "Exactly right! Both products offer SPF 50 protection. The $21 difference is paying for a brand name and celebrity endorsement — a want, not better function. This is a great example of how marketing tries to turn wants into perceived needs.",
+    incorrectFeedback: "Both products have the same SPF 50 protection — the active ingredient is what matters, not the branding. The $21 difference pays for marketing, not better sun protection. Skipping sunscreen entirely isn't an option when you need it for health."
+  },
+  // PHASE 2: DECISION-MAKING MODELS (Q5-7)
+  {
+    phase: "PHASE 2: DECISION MODELS",
+    title: "Apply the DECIDE Model",
+    scenario: "You've been saving $20/week from your job for 3 months. You now have $240. Your friend invites you on a weekend trip that costs $200, but you were saving for a $300 guitar you've wanted for a year.",
+    question: "Using the DECIDE model, what's the best FIRST step?",
+    options: ["Decide to go on the trip because experiences matter more","Estimate how long it would take to re-save the $200","Define the actual decision: trip now vs. guitar soon","Consider only the two obvious options"],
+    correct: 2,
+    correctFeedback: "That's correct! The first step in DECIDE is always 'D — Define the problem.' Before jumping to solutions, you need to clearly state what you're deciding. Here: 'Should I spend $200 on a trip or continue saving for a $300 guitar?' Only after defining can you move to estimating, considering, and identifying pros/cons.",
+    incorrectFeedback: "Remember the DECIDE model: D-E-C-I-D-E. The first step is always 'Define the problem.' Before estimating, considering options, or deciding, you need to clearly state what the decision actually is."
+  },
+  {
+    phase: "PHASE 2: DECISION MODELS",
+    title: "Opportunity Cost",
+    scenario: "You have one Saturday free. You can either: (A) work an extra shift at your job and earn $85, or (B) go to a free community event where local businesses are giving out internship applications in your dream career field.",
+    question: "If you choose to work the extra shift, what is your opportunity cost?",
+    options: ["$85 — the money you earned","The potential internship connections and career networking","Nothing — you made money so there's no cost","The gas money to drive to the community event"],
+    correct: 1,
+    correctFeedback: "Exactly! Opportunity cost is what you give UP — not what you gain. By working, you gained $85 but lost the chance to network and potentially land a career-building internship. The opportunity cost isn't always measured in dollars.",
+    incorrectFeedback: "Opportunity cost is the value of the option you DIDN'T choose. You chose to work and earned $85 (that's your gain, not your cost). What you gave up was the internship networking opportunity — that's the opportunity cost."
+  },
+  {
+    phase: "PHASE 2: DECISION MODELS",
+    title: "Cost-Benefit Analysis",
+    scenario: "You're considering buying a used car for $3,500 so you can drive to your job instead of taking the bus. The bus costs $60/month. Car insurance would be $120/month, gas about $80/month, and maintenance around $50/month.",
+    question: "Based on cost-benefit analysis, the monthly cost of the car ($250/month for insurance + gas + maintenance) vs. the bus ($60/month) means...",
+    options: ["The car is worth it because freedom is priceless","The car costs $190 MORE per month — the bus is the smarter financial choice for now","The costs are about the same so go with the car","You should buy the car because it builds credit"],
+    correct: 1,
+    correctFeedback: "Great analysis! $250/month (car) minus $60/month (bus) = $190 extra per month, or $2,280 per year — plus the $3,500 purchase price. The car has non-financial benefits (convenience, freedom), but purely financially, the bus wins. Cost-benefit analysis helps you see the full picture, not just the emotional appeal.",
+    incorrectFeedback: "Let's do the math: Car costs $120 + $80 + $50 = $250/month. Bus costs $60/month. That's $190 more per month for the car, or $2,280 extra per year — before the $3,500 purchase price. Freedom has value, but financially, the bus is clearly cheaper."
+  },
+  // PHASE 3: EMOTIONAL VS RATIONAL (Q8-10)
+  {
+    phase: "PHASE 3: EMOTIONAL VS. RATIONAL",
+    title: "Spot the System",
+    scenario: "Your favorite artist just announced a surprise concert in your city. Tickets are $150 and go on sale in 10 minutes. Your friends are all buying tickets in the group chat. You have $180 in your checking account, but your phone bill of $45 is due in 3 days.",
+    question: "Buying the ticket right now would be an example of which type of decision-making?",
+    options: ["Rational — concerts create memories and you have the money","Emotional — FOMO, excitement, and social pressure are driving the urgency","Rational — $150 is within your $180 balance","Emotional — but that's okay because life is short"],
+    correct: 1,
+    correctFeedback: "Spot on! Multiple emotional triggers are firing here: FOMO (fear of missing out), social pressure (friends are buying), excitement (favorite artist), and artificial urgency (10 minutes). Plus, spending $150 of your $180 when you have a $45 bill in 3 days would leave you $15 short. System 1 is in full control.",
+    incorrectFeedback: "Look at all the emotional triggers: FOMO, social pressure from friends, excitement about the artist, and time pressure. Plus, $150 from a $180 balance with a $45 bill due in 3 days means you'd be $15 short. That's System 1 (emotional) overriding System 2 (rational)."
+  },
+  {
+    phase: "PHASE 3: EMOTIONAL VS. RATIONAL",
+    title: "Best Strategy",
+    scenario: "You're scrolling online at 11 PM and find a jacket you love for $89. It says 'Only 2 left!' and there's a countdown timer showing a 30% discount expiring in 1 hour.",
+    question: "What's the best strategy to avoid an emotional purchase?",
+    options: ["Buy it now — the deal is real and you'll lose it","Screenshot it and apply the 24-Hour Rule","Add it to cart and check out quickly before the deal expires","Ask your friends if they think you should buy it"],
+    correct: 1,
+    correctFeedback: "Perfect use of the 24-Hour Rule! 'Only 2 left' and countdown timers are classic marketing tactics designed to trigger urgency (emotional). Screenshotting it lets you revisit the decision tomorrow when you're thinking clearly. Pro tip: that 'limited' deal will almost certainly come back.",
+    incorrectFeedback: "The '24-Hour Rule' is the best defense here. 'Only 2 left' and countdown timers are marketing pressure tactics designed to bypass your rational brain. Screenshot it, sleep on it, and check back tomorrow. These 'limited' deals almost always come back."
+  },
+  {
+    phase: "PHASE 3: EMOTIONAL VS. RATIONAL",
+    title: "Final Challenge",
+    scenario: "You've been eyeing a $500 gaming console for months. You did the research, compared prices, read reviews, and budgeted by saving $50/month for 10 months. Today you finally have enough.",
+    question: "Buying the console now is an example of...",
+    options: ["Emotional decision-making — $500 on a gaming console is always emotional","Rational decision-making — you planned, saved, and researched","Emotional — because gaming is entertainment, not a need","Neither — it's just spending money"],
+    correct: 1,
+    correctFeedback: "This is a textbook rational decision! You identified a goal, researched options, budgeted systematically, and saved over time. The purchase itself might be a want (gaming console), but the PROCESS was entirely rational. This is exactly how System 2 works — planned, deliberate, and informed. Wants aren't automatically bad — impulsive, unplanned spending is.",
+    incorrectFeedback: "Don't confuse WHAT you buy with HOW you decide to buy it. The console is a want, yes — but the decision process was completely rational: months of planning, research, price comparison, and systematic saving. Rational decision-making isn't about buying only needs — it's about making deliberate, informed choices."
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const container = document.getElementById('questionContainer');
+  const pct = Math.round((currentQuestion / questions.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+
+  let optionsHTML = '';
+  q.options.forEach((opt, i) => {
+    optionsHTML += `<button class="option-btn" onclick="selectAnswer(${i})" id="opt${i}">${opt}</button>`;
+  });
+
+  container.innerHTML = `
+    <div class="card">
+      <div class="card-phase">${q.phase}</div>
+      <h2>${q.title}</h2>
+      <div class="scenario-box">
+        <div class="scenario-label">SCENARIO</div>
+        <div class="scenario-text">${q.scenario}</div>
+      </div>
+      <p class="desc"><strong>${q.question}</strong></p>
+      <div class="option-grid">${optionsHTML}</div>
+      <div class="feedback correct" id="correctFeedback"><strong>✅ ${q.correctFeedback}</strong></div>
+      <div class="feedback incorrect" id="incorrectFeedback"><strong>❌ ${q.incorrectFeedback}</strong></div>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">${currentQuestion < questions.length - 1 ? 'Next Question →' : 'See Results'}</button>
+    </div>
+  `;
+  answered = false;
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[currentQuestion];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === q.correct) btn.classList.add('correct');
+    if (i === idx && i !== q.correct) btn.classList.add('incorrect');
+    if (i === idx) btn.classList.add('selected');
+  });
+  if (idx === q.correct) {
+    score++;
+    document.getElementById('correctFeedback').style.display = 'block';
+  } else {
+    document.getElementById('incorrectFeedback').style.display = 'block';
+  }
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('questionContainer').innerHTML = '';
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressText').textContent = 'Complete!';
+
+  const pct = Math.round((score / questions.length) * 100);
+  const circle = document.getElementById('scoreCircle');
+  circle.textContent = pct + '%';
+
+  if (pct >= 80) {
+    circle.className = 'score-circle score-high';
+    document.getElementById('resultsTitle').textContent = 'Excellent Work!';
+    document.getElementById('resultsMsg').textContent = "You've got a strong handle on financial decision-making fundamentals. You can spot the difference between needs and wants, apply decision models, and recognize when emotions are driving spending. These skills will serve you well throughout this course — and in life.";
+  } else if (pct >= 60) {
+    circle.className = 'score-circle score-mid';
+    document.getElementById('resultsTitle').textContent = 'Good Effort!';
+    document.getElementById('resultsMsg').textContent = "You're building solid financial thinking skills! Review the questions you missed — they highlight areas where your understanding can get even stronger. Pay special attention to context clues in scenarios and the specific steps of each decision model.";
+  } else {
+    circle.className = 'score-circle score-low';
+    document.getElementById('resultsTitle').textContent = 'Keep Practicing!';
+    document.getElementById('resultsMsg').textContent = "Financial decision-making is a skill that improves with practice. Re-read the Week 1 reading, especially the sections on needs vs. wants and the DECIDE model, then try this activity again. Focus on the reasoning behind each answer, not just memorizing the right choice.";
+  }
+
+  document.getElementById('scoreBreakdown').textContent = `You scored ${score} out of ${questions.length} (${pct}%)`;
+  document.getElementById('results').style.display = 'block';
+}
+
+function restartActivity() {
+  currentQuestion = 0;
+  score = 0;
+  document.getElementById('results').style.display = 'none';
+  renderQuestion();
+}
+
+// Start
+renderQuestion();
+</script>
+</body>
+</html>

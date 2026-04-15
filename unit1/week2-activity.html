@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Week 2 Activity: Bias Detective</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@400;500;600;700;800&family=Wix+Madefor+Text:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a0a14;color:#e2e8f0;font-family:'Wix Madefor Text',sans-serif;font-size:15px;line-height:1.7}
+.header{background:#0E1C42;padding:14px 24px;display:flex;align-items:center;gap:14px;border-bottom:2px solid #55C8E8}
+.header-title{font-family:'Wix Madefor Display',sans-serif;font-size:14px;font-weight:700;color:#fff}
+.header-sub{font-size:11px;color:#55C8E8}
+.badge{margin-left:auto;background:#F78F1E;color:#fff;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;font-family:'Wix Madefor Display',sans-serif}
+.wrap{max-width:820px;margin:0 auto;padding:28px 20px 60px}
+.hero{background:linear-gradient(135deg,#0E1C42,#1a2d5a);border-radius:16px;padding:32px;margin-bottom:28px;border:1px solid rgba(85,200,232,0.25)}
+.hero h1{font-family:'Wix Madefor Display',sans-serif;font-size:26px;font-weight:800;color:#a0d4f0;margin-bottom:8px}
+.hero p{color:#94a3b8;font-size:14px}
+.progress-bar{background:#111122;border-radius:14px;padding:18px 24px;margin-bottom:24px;border:1px solid rgba(255,255,255,0.06)}
+.progress-label{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#55C8E8;font-family:'Wix Madefor Display',sans-serif;margin-bottom:10px}
+.progress-track{background:rgba(255,255,255,0.06);border-radius:20px;height:10px;overflow:hidden}
+.progress-fill{background:linear-gradient(90deg,#55C8E8,#76C043);height:100%;border-radius:20px;transition:width 0.5s ease}
+.progress-text{font-size:12px;color:#94a3b8;margin-top:6px;text-align:right}
+.card{background:#111122;border-radius:14px;padding:28px;margin-bottom:24px;border:1px solid rgba(255,255,255,0.06)}
+.card h2{font-family:'Wix Madefor Display',sans-serif;font-size:20px;font-weight:700;color:#e2e8f0;margin-bottom:6px}
+.card-phase{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#67308F;font-family:'Wix Madefor Display',sans-serif;margin-bottom:6px}
+.card p.desc{color:#c8d6e8;font-size:14px;margin-bottom:18px}
+.option-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.option-btn{background:rgba(85,200,232,0.06);border:2px solid rgba(85,200,232,0.15);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;text-align:left;color:#e2e8f0;font-family:'Wix Madefor Text',sans-serif;font-size:14px}
+.option-btn:hover{border-color:#55C8E8;background:rgba(85,200,232,0.12);transform:translateY(-1px)}
+.option-btn.correct{border-color:#76C043;background:rgba(118,192,67,0.15)}
+.option-btn.incorrect{border-color:#ef4444;background:rgba(239,68,68,0.1)}
+.option-btn.disabled{pointer-events:none;opacity:0.7}
+.option-btn.selected{border-color:#55C8E8;background:rgba(85,200,232,0.15);box-shadow:0 0 12px rgba(85,200,232,0.2)}
+.feedback{border-radius:10px;padding:16px 20px;margin-top:16px;display:none;font-size:14px}
+.feedback.correct{background:rgba(118,192,67,0.1);border:1px solid rgba(118,192,67,0.3);color:#a3e635}
+.feedback.incorrect{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#fca5a5}
+.next-btn{background:linear-gradient(135deg,#55C8E8,#0E5568);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Wix Madefor Display',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;display:none;transition:all 0.2s}
+.next-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(85,200,232,0.3)}
+.scenario-box{background:rgba(0,0,0,0.25);border-radius:12px;padding:20px;margin-bottom:16px;border:1px solid rgba(255,255,255,0.05)}
+.scenario-label{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:#F78F1E;margin-bottom:6px}
+.scenario-text{color:#e2e8f0;font-size:14px}
+.results{background:linear-gradient(135deg,#0E1C42,#1a2d5a);border-radius:16px;padding:36px;margin-bottom:28px;border:1px solid rgba(85,200,232,0.25);text-align:center;display:none}
+.results h2{font-family:'Wix Madefor Display',sans-serif;font-size:28px;font-weight:800;color:#a0d4f0;margin-bottom:12px}
+.score-circle{width:120px;height:120px;border-radius:50%;margin:20px auto;display:flex;align-items:center;justify-content:center;font-family:'Wix Madefor Display',sans-serif;font-size:36px;font-weight:800;color:#fff}
+.score-high{background:linear-gradient(135deg,#76C043,#4a8a25);border:3px solid rgba(118,192,67,0.5)}
+.score-mid{background:linear-gradient(135deg,#C7922C,#9a7020);border:3px solid rgba(199,146,44,0.5)}
+.score-low{background:linear-gradient(135deg,#ef4444,#b91c1c);border:3px solid rgba(239,68,68,0.5)}
+.retry-btn{background:linear-gradient(135deg,#C7922C,#9a7020);color:#fff;border:none;padding:12px 28px;border-radius:10px;font-family:'Wix Madefor Display',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:16px;transition:all 0.2s}
+.retry-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(199,146,44,0.3)}
+@media(max-width:600px){.option-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-title">Personal Finance &amp; Money Management</div>
+    <div class="header-sub">Optima Academy Online</div>
+  </div>
+  <div class="badge">Activity · Week 2</div>
+</div>
+
+<div class="wrap">
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Bias Detective</h1>
+  <p>Companies use your brain's built-in glitches against you every day. Time to flip the script. Spot the biases, see through the tricks, and protect your wallet.</p>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar">
+  <div class="progress-label">YOUR PROGRESS</div>
+  <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-text" id="progressText">Question 0 of 10</div>
+</div>
+
+<!-- QUESTION CONTAINER -->
+<div id="questionContainer"></div>
+
+<!-- RESULTS -->
+<div class="results" id="results">
+  <h2 id="resultsTitle">Investigation Complete!</h2>
+  <div class="score-circle" id="scoreCircle">0%</div>
+  <p id="resultsMsg" style="color:#c8d6e8;font-size:15px;margin:16px 0;max-width:500px;margin-left:auto;margin-right:auto;"></p>
+  <p id="scoreBreakdown" style="color:#94a3b8;font-size:13px;margin-bottom:16px;"></p>
+  <button class="retry-btn" onclick="restartActivity()">Investigate Again</button>
+</div>
+
+</div>
+
+<script>
+const questions = [
+  // PHASE 1: IDENTIFY THE BIAS (Q1-5)
+  {
+    phase: "PHASE 1: SPOT THE BIAS",
+    title: "Marketing Trick #1",
+    scenario: "A clothing store displays a sweater with a tag reading: 'Original Price: $120 — NOW $49.99!' You've never seen this sweater before and have no idea what it's actually worth.",
+    question: "Which cognitive bias is the store exploiting?",
+    options: ["Anchoring — the $120 \"original price\" makes $49.99 feel like a bargain","Bandwagon Effect — everyone shops at this store","Loss Aversion — you'll lose the deal if you don't buy","Present Bias — the sweater is available right now"],
+    correct: 0,
+    correctFeedback: "Nailed it! The $120 is an anchor — possibly inflated or fictitious — designed to make $49.99 feel like a steal. Without the anchor, you'd evaluate $49.99 on its own merits. This is one of the most common pricing tricks in retail.",
+    incorrectFeedback: "This is anchoring in action. The store placed a high 'original price' ($120) as an anchor so that $49.99 feels like a deal by comparison. Without seeing $120 first, you'd judge $49.99 completely differently."
+  },
+  {
+    phase: "PHASE 1: SPOT THE BIAS",
+    title: "Marketing Trick #2",
+    scenario: "An online ad says: 'FLASH SALE: 70% off ends in 2 hours! Don't miss out — 847 people are viewing this item right now!'",
+    question: "This ad is primarily exploiting which TWO biases?",
+    options: ["Anchoring + Confirmation Bias","Loss Aversion + Bandwagon Effect","Present Bias + Confirmation Bias","Anchoring + Present Bias"],
+    correct: 1,
+    correctFeedback: "Exactly right! 'Don't miss out' and the countdown timer trigger Loss Aversion (fear of losing the deal). '847 people viewing' triggers the Bandwagon Effect (if hundreds of others want it, it must be good). Two biases working together = double the manipulation.",
+    incorrectFeedback: "Look for the two emotional triggers: 'Don't miss out' + countdown timer = Loss Aversion (fear of losing something). '847 people viewing' = Bandwagon Effect (social proof that others want it). These two biases are being weaponized together."
+  },
+  {
+    phase: "PHASE 1: SPOT THE BIAS",
+    title: "Marketing Trick #3",
+    scenario: "A food delivery app sends you a notification: 'You have $5 in credits expiring tonight! Order now so you don't lose them.'",
+    question: "Which bias makes this notification effective?",
+    options: ["Confirmation Bias — you confirm you like the app","Present Bias — you want food right now","Loss Aversion — losing $5 in credits feels worse than never having them","Bandwagon Effect — your friends use the app too"],
+    correct: 2,
+    correctFeedback: "That's right! The notification frames the credits as something you already 'have' — so not using them feels like losing $5. In reality, they cost you nothing and the app WANTS you to spend $20+ to 'save' $5. Classic loss aversion exploitation.",
+    incorrectFeedback: "This is loss aversion. The app frames the credits as 'yours' that will be 'lost' — even though they were free. The pain of 'losing $5' motivates you to place an order you wouldn't otherwise make, likely spending $20+ to 'save' $5."
+  },
+  {
+    phase: "PHASE 1: SPOT THE BIAS",
+    title: "Marketing Trick #4",
+    scenario: "You're researching a new phone. You love Brand X, so you read their website, watch their launch video, and check a fan forum. All sources say it's amazing. You don't check any tech review sites or competitor comparisons.",
+    question: "Which bias is guiding your research process?",
+    options: ["Present Bias — you want the phone now","Anchoring — Brand X set the price anchor","Bandwagon Effect — fan forums are peer pressure","Confirmation Bias — you only sought info that supports your preference"],
+    correct: 3,
+    correctFeedback: "Textbook confirmation bias! You started with a preference (Brand X) and only consulted sources that would reinforce it: the company's own marketing, their launch video, and a fan community. You actively avoided information that might challenge your belief.",
+    incorrectFeedback: "This is confirmation bias. You already liked Brand X, so your 'research' only included sources that would agree: the brand's own site, their marketing video, and fans. You avoided neutral tech reviewers or competitors — your brain filtered for confirmation."
+  },
+  {
+    phase: "PHASE 1: SPOT THE BIAS",
+    title: "Marketing Trick #5",
+    scenario: "A subscription box service offers: 'First month FREE — cancel anytime!' You sign up thinking you'll cancel after the free month. Three months later, you're still paying $29.99/month for items you barely use.",
+    question: "Which bias combination kept you subscribed?",
+    options: ["Anchoring + Bandwagon — the free month was the anchor","Present Bias + Loss Aversion — free now was irresistible, canceling feels like losing","Confirmation Bias + Anchoring — you convinced yourself it was worth it","Bandwagon + Present Bias — everyone has subscription boxes"],
+    correct: 1,
+    correctFeedback: "Spot on! Present Bias made 'FREE' irresistible in the moment (future charges felt abstract). Then Loss Aversion kicked in — canceling felt like 'losing' something you now 'have,' even though keeping it costs you $30/month for stuff you don't need. This is exactly how subscription traps work.",
+    incorrectFeedback: "Two biases are at work: Present Bias made you grab the free trial without thinking about future charges (they felt distant and abstract). Then Loss Aversion kept you paying — canceling felt like 'losing' the subscription, even though it wasn't providing value."
+  },
+  // PHASE 2: CASE STUDY ANALYSIS (Q6-8)
+  {
+    phase: "PHASE 2: CASE ANALYSIS",
+    title: "The Sneaker Resale Disaster",
+    scenario: "Tyler bought limited-edition sneakers for $250, planning to resell them for $400+. The resale market dropped and the best offer he can get is $180. He's holding onto them, refusing to sell, because 'I'm not selling at a loss.' The sneakers are sitting in a box, unworn, taking up space. Meanwhile, he needs $180 for car insurance this month.",
+    question: "Tyler's decision to hold the sneakers is driven by which bias — and what should he do?",
+    options: ["Loss Aversion — sell now. The $250 is a sunk cost. $180 today beats $0 if the market drops further.","Anchoring — he should wait until the price hits $250 again to break even.","Bandwagon Effect — he should hold because reselling is trendy.","Present Bias — he wants the money now but should wait for better returns."],
+    correct: 0,
+    correctFeedback: "Excellent analysis! Tyler is experiencing loss aversion — the pain of 'losing' $70 (selling at $180 vs. the $250 he paid) is preventing a rational decision. The $250 is a sunk cost — it's gone whether he sells or not. The real question is: 'Is $180 now better than an uncertain future value?' Given he needs the money for car insurance, absolutely yes.",
+    incorrectFeedback: "Tyler's holding pattern is loss aversion: selling at $180 'feels' like losing $70, but the $250 he paid is a sunk cost — gone either way. The rational choice: take $180 now (especially since he needs it for car insurance) rather than risk the price dropping further."
+  },
+  {
+    phase: "PHASE 2: CASE ANALYSIS",
+    title: "The \"Everyone's Investing\" Trap",
+    scenario: "A trending cryptocurrency goes viral on social media. Zoe's classmates are all talking about how much money they've made. She invests her entire $800 savings — money she'd been saving for a car — without researching what the cryptocurrency actually does or understanding the risks. A week later, the crypto drops 60% and her $800 is now worth $320.",
+    question: "What biases led to Zoe's loss, and what was her biggest mistake?",
+    options: ["Loss Aversion — she should have sold sooner","Bandwagon Effect + Present Bias — social pressure and desire for quick gains overrode research","Confirmation Bias — she only read positive posts about crypto","Anchoring — she was anchored to the trending price"],
+    correct: 1,
+    correctFeedback: "Great detective work! The Bandwagon Effect drove her in ('everyone's making money'). Present Bias made quick gains feel irresistible while the risk of losing felt abstract. Her biggest mistake: investing all $800 without any research or understanding of the asset. Social proof is not due diligence.",
+    incorrectFeedback: "The primary drivers were: Bandwagon Effect (classmates all talking about their gains created irresistible social proof) and Present Bias (quick profits felt real and immediate, while risks felt distant). Her core mistake: using social media hype as her only 'research.'"
+  },
+  {
+    phase: "PHASE 2: CASE ANALYSIS",
+    title: "The Upgrade Cycle",
+    scenario: "Every September, Kai buys the newest smartphone model — even though their current phone works perfectly. Their reasoning: 'The new camera is way better' (they take about 5 photos a month), 'My current phone is slow' (it's a year old and benchmarks show 3% speed difference), and 'Everyone at school has the new one.'",
+    question: "How many distinct biases can you identify in Kai's behavior?",
+    options: ["1 — just Bandwagon Effect (peer pressure)","2 — Bandwagon Effect + Confirmation Bias","3 — Bandwagon Effect + Confirmation Bias + Present Bias","4 — Bandwagon + Confirmation + Present Bias + Anchoring"],
+    correct: 2,
+    correctFeedback: "Three biases detected! Bandwagon Effect: 'everyone at school has it.' Confirmation Bias: exaggerating the camera and speed improvements to justify a decision already made emotionally (5 photos/month doesn't justify a camera upgrade; 3% speed difference is imperceptible). Present Bias: the excitement of 'new' overrides the rational reality that their phone works fine.",
+    incorrectFeedback: "There are three biases at play: Bandwagon Effect ('everyone has it'), Confirmation Bias (overemphasizing the camera upgrade despite taking 5 photos/month and citing a 3% speed difference as 'slow'), and Present Bias (the thrill of the new model overrides rational assessment of a perfectly working phone)."
+  },
+  // PHASE 3: DEFENSE STRATEGIES (Q9-10)
+  {
+    phase: "PHASE 3: DEFENSE STRATEGIES",
+    title: "Choose Your Defense",
+    scenario: "You're about to buy a $75 gadget you saw on Instagram. You've never heard of this brand before, but the ad had 50,000 likes and the comments are all positive.",
+    question: "Which defense strategy should you use FIRST?",
+    options: ["The Pause Protocol — wait 24 hours before buying","The Research Rule — read 3 independent reviews, including negative ones","The \"Why 3 Times\" Method — dig into your real motivation","The Flip Test — ask if you'd buy it again at this price"],
+    correct: 1,
+    correctFeedback: "The Research Rule is the best first move here! The biggest red flag is that you've never heard of this brand — all your 'information' comes from a paid ad and its comments (which can be manipulated). Before anything else, you need independent, unbiased information. Read real reviews from tech sites, check the brand's reputation, and look at the 1-star reviews. THEN decide if the Pause Protocol is needed.",
+    incorrectFeedback: "While all these tools are useful, the Research Rule should come first here. Why? Your only information source is an Instagram ad and its comments — both can be manipulated. You need independent data from real review sites before any other decision-making tool applies. You can't even do a proper cost-benefit analysis without real information."
+  },
+  {
+    phase: "PHASE 3: DEFENSE STRATEGIES",
+    title: "Master Detective Challenge",
+    scenario: "Your friend says: 'I just put $500 into a meme stock because my cousin's friend works on Wall Street and says it's about to blow up. I know it's risky, but I'll definitely sell before it drops. You should invest too!'",
+    question: "How many problematic elements can you identify in your friend's reasoning?",
+    options: ["2 — it's just Bandwagon Effect and overconfidence","3 — Bandwagon, Confirmation Bias, and Present Bias","4 — Bandwagon, Confirmation Bias, Present Bias, and overconfidence in ability to time the market","5+ — all of the above, plus the information source is unreliable thirdhand gossip"],
+    correct: 3,
+    correctFeedback: "Master Detective level achieved! (1) Bandwagon: 'you should invest too' (social pressure). (2) Confirmation Bias: they're treating thirdhand gossip as reliable because they WANT it to be true. (3) Present Bias: excitement about quick gains overrides risk assessment. (4) Overconfidence: 'I'll definitely sell before it drops' — research shows even professional traders can't consistently time the market. Bonus: the info source is literally someone's cousin's friend — that's not insider info, that's a rumor chain.",
+    incorrectFeedback: "There are at least 4 problems: Bandwagon pressure ('you should invest too'), Confirmation Bias (treating thirdhand gossip as reliable info), Present Bias (excitement over quick gains), and dangerous overconfidence ('I'll definitely sell before it drops' — pros can't even do this). Plus, 'my cousin's friend' is several degrees removed from actual expertise."
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+  const q = questions[currentQuestion];
+  const container = document.getElementById('questionContainer');
+  const pct = Math.round((currentQuestion / questions.length) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+
+  let optionsHTML = '';
+  q.options.forEach((opt, i) => {
+    optionsHTML += `<button class="option-btn" onclick="selectAnswer(${i})" id="opt${i}">${opt}</button>`;
+  });
+
+  container.innerHTML = `
+    <div class="card">
+      <div class="card-phase">${q.phase}</div>
+      <h2>${q.title}</h2>
+      <div class="scenario-box">
+        <div class="scenario-label">SCENARIO</div>
+        <div class="scenario-text">${q.scenario}</div>
+      </div>
+      <p class="desc"><strong>${q.question}</strong></p>
+      <div class="option-grid">${optionsHTML}</div>
+      <div class="feedback correct" id="correctFeedback"><strong>🔍 ${q.correctFeedback}</strong></div>
+      <div class="feedback incorrect" id="incorrectFeedback"><strong>🔍 ${q.incorrectFeedback}</strong></div>
+      <button class="next-btn" id="nextBtn" onclick="nextQuestion()">${currentQuestion < questions.length - 1 ? 'Next Case →' : 'See Results'}</button>
+    </div>
+  `;
+  answered = false;
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+  const q = questions[currentQuestion];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if (i === q.correct) btn.classList.add('correct');
+    if (i === idx && i !== q.correct) btn.classList.add('incorrect');
+    if (i === idx) btn.classList.add('selected');
+  });
+  if (idx === q.correct) {
+    score++;
+    document.getElementById('correctFeedback').style.display = 'block';
+  } else {
+    document.getElementById('incorrectFeedback').style.display = 'block';
+  }
+  document.getElementById('nextBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  currentQuestion++;
+  if (currentQuestion >= questions.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  document.getElementById('questionContainer').innerHTML = '';
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressText').textContent = 'Investigation Complete!';
+
+  const pct = Math.round((score / questions.length) * 100);
+  const circle = document.getElementById('scoreCircle');
+  circle.textContent = pct + '%';
+
+  if (pct >= 80) {
+    circle.className = 'score-circle score-high';
+    document.getElementById('resultsTitle').textContent = 'Master Bias Detective!';
+    document.getElementById('resultsMsg').textContent = "Outstanding work! You can spot cognitive biases in marketing, real-world scenarios, and complex financial decisions. This awareness is your first line of defense against manipulation. Keep these detection skills sharp — you'll use them throughout this course and for the rest of your financial life.";
+  } else if (pct >= 60) {
+    circle.className = 'score-circle score-mid';
+    document.getElementById('resultsTitle').textContent = 'Solid Detective Work!';
+    document.getElementById('resultsMsg').textContent = "You're building good bias-detection skills! Review the cases you missed — the key is recognizing that biases often work in combinations. Marketing rarely exploits just one bias at a time. The more you practice spotting them, the harder they become to exploit.";
+  } else {
+    circle.className = 'score-circle score-low';
+    document.getElementById('resultsTitle').textContent = 'Keep Investigating!';
+    document.getElementById('resultsMsg').textContent = "These biases are tricky — that's exactly why they're so effective! Re-read the Week 2 reading, focusing on each bias's definition and real-world examples. Then try this activity again. Focus on the specific emotional triggers in each scenario — that's where biases hide.";
+  }
+
+  document.getElementById('scoreBreakdown').textContent = `You identified ${score} out of ${questions.length} biases correctly (${pct}%)`;
+  document.getElementById('results').style.display = 'block';
+}
+
+function restartActivity() {
+  currentQuestion = 0;
+  score = 0;
+  document.getElementById('results').style.display = 'none';
+  renderQuestion();
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
