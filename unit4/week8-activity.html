@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 8 Activity: Banking Decisions Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@700;800&family=Wix+Madefor+Text:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#0a0a14; color:#e2e8f0; font-family:'Wix Madefor Text', sans-serif; font-weight:400; line-height:1.7; font-size:16px; }
+        .header-bar { background:#0E1C42; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+        .header-title { font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:18px; color:#fff; letter-spacing:0.5px; }
+        .header-sub { font-size:13px; color:#55C8E8; font-weight:500; }
+        .header-badge { background:linear-gradient(135deg, #F78F1E, #c46a0a); color:#fff; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; padding:6px 16px; border-radius:20px; letter-spacing:0.5px; text-transform:uppercase; }
+        .hero { background:linear-gradient(135deg, #0E1C42 0%, #1a1a3e 40%, #67308F 100%); padding:48px 24px; text-align:center; }
+        .hero h1 { font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:clamp(24px,4.5vw,36px); color:#fff; margin-bottom:8px; }
+        .hero p { color:#c8d6e8; font-size:17px; max-width:600px; margin:0 auto; }
+        .progress-container { max-width:800px; margin:0 auto; padding:24px 24px 0; }
+        .progress-bar-bg { background:#1a1a2e; border-radius:12px; height:14px; overflow:hidden; }
+        .progress-bar-fill { height:100%; border-radius:12px; background:linear-gradient(90deg, #55C8E8, #76C043); transition:width 0.5s ease; }
+        .progress-text { font-size:13px; color:#8899aa; margin-top:6px; text-align:right; font-weight:500; }
+        .content { max-width:800px; margin:0 auto; padding:24px; }
+        .phase-label { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#55C8E8; margin-bottom:16px; }
+        .scenario-box { background:#111122; border-radius:12px; padding:20px 24px; margin-bottom:24px; border:1px solid rgba(247,143,30,0.2); }
+        .scenario-label { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; color:#F78F1E; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+        .question-text { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:19px; color:#fff; margin-bottom:20px; line-height:1.4; }
+        .question-counter { font-size:13px; color:#8899aa; margin-bottom:8px; font-weight:500; }
+        .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+        @media(max-width:600px) { .options-grid { grid-template-columns:1fr; } }
+        .option-btn { background:#111122; border:2px solid #2a2a4a; border-radius:12px; padding:16px 18px; color:#c8d6e8; font-family:'Wix Madefor Text', sans-serif; font-size:15px; font-weight:500; cursor:pointer; text-align:left; transition:all 0.2s ease; line-height:1.5; }
+        .option-btn:hover { border-color:#55C8E8; background:#161630; }
+        .option-btn.correct { border-color:#76C043; background:rgba(118,192,67,0.12); color:#fff; }
+        .option-btn.incorrect { border-color:#e74c5a; background:rgba(231,76,90,0.1); color:#aaa; }
+        .option-btn.disabled { pointer-events:none; }
+        .feedback { border-radius:12px; padding:18px 22px; margin-top:16px; display:none; line-height:1.6; }
+        .feedback.correct { background:rgba(118,192,67,0.1); border-left:4px solid #76C043; }
+        .feedback.incorrect { background:rgba(231,76,90,0.08); border-left:4px solid #e74c5a; }
+        .feedback-title { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; margin-bottom:6px; }
+        .feedback.correct .feedback-title { color:#76C043; }
+        .feedback.incorrect .feedback-title { color:#e74c5a; }
+        .feedback p { color:#c8d6e8; font-size:14px; }
+        .next-btn { display:none; margin-top:20px; background:linear-gradient(135deg, #55C8E8, #0E5568); color:#fff; border:none; border-radius:10px; padding:14px 32px; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; cursor:pointer; letter-spacing:0.5px; transition:transform 0.15s; }
+        .next-btn:hover { transform:scale(1.03); }
+        .results-screen { display:none; text-align:center; padding:48px 24px; }
+        .score-circle { width:160px; height:160px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:42px; color:#fff; }
+        .score-label { font-size:15px; color:#8899aa; margin-bottom:8px; }
+        .score-msg { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:22px; color:#fff; margin-bottom:8px; }
+        .score-detail { color:#c8d6e8; max-width:500px; margin:0 auto 32px; }
+        .retry-btn { background:linear-gradient(135deg, #F78F1E, #c46a0a); color:#fff; border:none; border-radius:10px; padding:14px 36px; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; cursor:pointer; }
+        .retry-btn:hover { transform:scale(1.03); }
+        .hidden { display:none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <div>
+            <div class="header-title">Personal Finance &amp; Money Management Honors</div>
+            <div class="header-sub">Optima Academy Online</div>
+        </div>
+        <div class="header-badge">Activity · Week 8</div>
+    </div>
+
+    <div class="hero">
+        <h1>Banking Decisions Challenge</h1>
+        <p>Compare institutions, match accounts to goals, and test your banking knowledge.</p>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-text" id="progressText">Question 1 of 10</div>
+    </div>
+
+    <div class="content" id="quizArea">
+        <div id="phaseLabel" class="phase-label"></div>
+        <div id="scenarioBox" class="scenario-box hidden">
+            <div class="scenario-label">📋 SCENARIO</div>
+            <div id="scenarioText"></div>
+        </div>
+        <div class="question-counter" id="questionCounter"></div>
+        <div class="question-text" id="questionText"></div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback" id="feedbackBox"><div class="feedback-title" id="feedbackTitle"></div><p id="feedbackText"></p></div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+
+    <div class="results-screen" id="resultsScreen">
+        <div class="score-label">YOUR SCORE</div>
+        <div class="score-circle" id="scoreCircle"></div>
+        <div class="score-msg" id="scoreMsg"></div>
+        <div class="score-detail" id="scoreDetail"></div>
+        <button class="retry-btn" onclick="restartQuiz()">Try Again</button>
+    </div>
+
+<script>
+const questions = [
+    // PHASE 1: Comparing Financial Institutions (Q1-4)
+    {
+        phase: "PHASE 1: COMPARING FINANCIAL INSTITUTIONS",
+        scenario: "Destiny just got her first part-time job at a retail store in Fort Lauderdale. She needs to open a bank account for her direct deposit and wants to start saving. She's comparing three options.",
+        question: "Why might a credit union offer Destiny a higher savings rate and lower fees than a big national bank?",
+        options: ["Credit unions have more branches and ATMs", "Credit unions are not-for-profit and return profits to members through better rates", "Credit unions don't need to follow any regulations", "Credit unions only serve wealthy customers"],
+        correct: 1,
+        correctFeedback: "Credit unions are not-for-profit cooperatives owned by their members. Because they don't need to maximize profits for shareholders, they can pass savings to members in the form of higher savings rates, lower loan rates, and fewer fees.",
+        incorrectFeedback: "Credit unions are not-for-profit organizations owned by their members (not shareholders). Since they don't need to generate profits, they can offer better rates and lower fees. They are still regulated — by the NCUA."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Destiny finds an online bank offering 4.5% APY on savings. A local bank offers 0.03% APY. On a $1,000 balance, approximately how much MORE would she earn in one year at the online bank?",
+        options: ["About $4.50 more", "About $44.70 more", "About $450 more", "They'd earn about the same"],
+        correct: 1,
+        correctFeedback: "Online bank: $1,000 × 0.045 = $45.00/year. Local bank: $1,000 × 0.0003 = $0.30/year. Difference: $44.70. That's 150 times more interest — and the money is equally safe if both are FDIC insured.",
+        incorrectFeedback: "Do the math: Online bank earns $1,000 × 4.5% = $45.00/year. Local bank earns $1,000 × 0.03% = $0.30/year. The difference is $44.70 — a massive gap on the same deposit. Online banks can offer more because they save on branch costs."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "What is the main trade-off Destiny accepts by choosing an online bank over a local bank?",
+        options: ["Her money won't be FDIC insured", "She'll earn less interest", "She won't have access to physical branches for in-person help", "She can't use a mobile app"],
+        correct: 2,
+        correctFeedback: "The primary trade-off with online banks is no physical branches. You can't walk in and talk to a teller. However, most online banks offer 24/7 customer support by phone, chat, and email, and your money is FDIC insured.",
+        incorrectFeedback: "Online banks are FDIC insured (same as traditional banks) and typically offer higher interest. The trade-off is no physical branches — you can't visit in person. Most compensate with excellent digital tools and 24/7 phone/chat support."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Many smart savers use BOTH a local institution and an online bank. Why?",
+        options: ["Because you're required to have accounts at two institutions", "To combine convenient daily access (local) with high interest rates (online)", "Because online banks don't offer checking accounts", "To avoid paying taxes on interest"],
+        correct: 1,
+        correctFeedback: "Using both gives you the best of each: a local bank or credit union for daily checking, cash deposits, and ATM access, plus an online high-yield savings account to maximize interest on your long-term savings.",
+        incorrectFeedback: "There's no requirement, but using both is a smart strategy: a local institution handles daily checking and cash deposits conveniently, while an online bank maximizes interest on savings. Each institution plays to its strength."
+    },
+    // PHASE 2: Matching Accounts to Goals (Q5-7)
+    {
+        phase: "PHASE 2: MATCHING ACCOUNTS TO GOALS",
+        scenario: "Renzo has $3,000 saved and three financial goals: (1) a $1,000 emergency fund he might need anytime, (2) $1,200 for a car he's buying in exactly 12 months, and (3) $800 for a spring break trip in 4 months.",
+        question: "Which account type is BEST for Renzo's $1,000 emergency fund?",
+        options: ["A 2-year CD for maximum interest", "A high-yield savings account for easy access and solid interest", "A money market account with a $2,500 minimum balance", "A checking account with 0% interest"],
+        correct: 1,
+        correctFeedback: "Emergency funds need to be accessible immediately — you can't predict when an emergency will happen. A high-yield savings account earns good interest while letting Renzo withdraw anytime without penalties.",
+        incorrectFeedback: "Emergency funds must be liquid (easily accessible). A CD locks money away with penalties for early withdrawal. A high-yield savings account is ideal: it earns solid interest while keeping money available whenever an emergency strikes."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "For Renzo's $1,200 car fund that he'll need in exactly 12 months, which option would likely earn the MOST interest?",
+        options: ["A regular savings account at a traditional bank (0.03% APY)", "A 12-month CD at an online bank (5.0% APY)", "Keeping cash in his wallet", "A checking account with no interest"],
+        correct: 1,
+        correctFeedback: "A 12-month CD is perfect here because Renzo knows exactly when he needs the money. The CD locks in a guaranteed 5.0% rate — earning him about $60 on that $1,200 — and matures right when he needs the money for his car.",
+        incorrectFeedback: "Since Renzo knows he needs the money in exactly 12 months, a 12-month CD is the ideal match. It earns the highest rate (about $60 on $1,200) and the maturity date aligns perfectly with his goal."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Why would a CD be a BAD choice for Renzo's spring break fund that he needs in 4 months?",
+        options: ["CDs don't earn any interest", "A 12-month CD would lock his money past when he needs it, and early withdrawal means a penalty", "CDs are not FDIC insured", "CDs can only be opened at credit unions"],
+        correct: 1,
+        correctFeedback: "Most CDs have terms of 6 months or longer. If Renzo puts his spring break money in a 12-month CD, he'd need to withdraw early and pay a penalty — potentially wiping out any interest earned. A savings account is better for this short timeline.",
+        incorrectFeedback: "CDs lock your money for a set term. If Renzo needs his spring break money in 4 months but the CD doesn't mature for 12 months, he'd face an early withdrawal penalty. Short-term savings goals belong in liquid savings accounts."
+    },
+    // PHASE 3: FDIC/NCUA Insurance (Q8-10)
+    {
+        phase: "PHASE 3: DEPOSIT INSURANCE & SAFETY",
+        scenario: "Aaliyah, a senior in Orlando, has been saving for two years and has $8,000 total. She's researching where to keep her money safe.",
+        question: "Aaliyah's credit union is NCUA insured. What does this mean for her $8,000?",
+        options: ["Her money earns a guaranteed 5% interest rate", "If the credit union fails, the government will reimburse her up to $250,000", "She can never lose money on any investment through the credit union", "Her credit score will increase automatically"],
+        correct: 1,
+        correctFeedback: "NCUA insurance means Aaliyah's deposits are protected up to $250,000. If her credit union were to fail, the federal government would reimburse every penny of her $8,000. It's the credit union equivalent of FDIC insurance for banks.",
+        incorrectFeedback: "NCUA insurance protects deposits (savings, checking, CDs) up to $250,000 per depositor per credit union. If the institution fails, the government pays you back. It doesn't affect interest rates, investments, or credit scores."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Which of the following is NOT covered by FDIC or NCUA deposit insurance?",
+        options: ["Savings accounts", "Certificates of deposit (CDs)", "Cryptocurrency held on an exchange", "Money market deposit accounts"],
+        correct: 2,
+        correctFeedback: "FDIC/NCUA insurance covers traditional deposit products: savings accounts, checking accounts, CDs, and money market deposit accounts. Cryptocurrency, stocks, bonds, and mutual funds are NOT insured — even if purchased through a bank.",
+        incorrectFeedback: "Savings accounts, CDs, and money market deposit accounts are all FDIC/NCUA insured. Cryptocurrency is NOT insured by any federal agency. If a crypto platform fails, your funds could be lost entirely — there's no government safety net."
+    },
+    {
+        phase: "",
+        scenario: "Aaliyah sees an ad for a new fintech app promising 8% returns on savings. The app says 'your funds are secure' but doesn't mention FDIC or NCUA insurance anywhere.",
+        question: "What should Aaliyah do before depositing money in this app?",
+        options: ["Deposit money right away — 8% is a great return", "Trust the app because it says 'secure'", "Verify FDIC/NCUA insurance on fdic.gov or ncua.gov; if uninsured, her money is not protected", "Assume all financial apps are automatically insured"],
+        correct: 2,
+        correctFeedback: "Never assume an app or institution is insured just because it says 'secure.' Always verify at fdic.gov/BankFind or ncua.gov. If an app isn't backed by FDIC/NCUA insurance, your deposits have no federal protection if the company fails.",
+        incorrectFeedback: "The word 'secure' is marketing — not a guarantee. Aaliyah should verify insurance at fdic.gov or ncua.gov before depositing anything. Uninsured platforms have caused consumers to lose money when they've failed. Always check first."
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+    const q = questions[currentQuestion];
+    document.getElementById('progressFill').style.width = ((currentQuestion) / questions.length * 100) + '%';
+    document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+
+    const phaseLabel = document.getElementById('phaseLabel');
+    if (q.phase) { phaseLabel.textContent = q.phase; phaseLabel.classList.remove('hidden'); }
+    else { phaseLabel.classList.add('hidden'); }
+
+    const scenarioBox = document.getElementById('scenarioBox');
+    if (q.scenario) { document.getElementById('scenarioText').innerHTML = `<p style="color:#c8d6e8; margin:0;">${q.scenario}</p>`; scenarioBox.classList.remove('hidden'); }
+    else { scenarioBox.classList.add('hidden'); }
+
+    document.getElementById('questionCounter').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+    document.getElementById('questionText').textContent = q.question;
+
+    const grid = document.getElementById('optionsGrid');
+    grid.innerHTML = '';
+    q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => selectAnswer(i);
+        grid.appendChild(btn);
+    });
+
+    document.getElementById('feedbackBox').style.display = 'none';
+    document.getElementById('nextBtn').style.display = 'none';
+    answered = false;
+}
+
+function selectAnswer(index) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQuestion];
+    const buttons = document.querySelectorAll('.option-btn');
+    const isCorrect = index === q.correct;
+
+    buttons.forEach((btn, i) => {
+        btn.classList.add('disabled');
+        if (i === q.correct) btn.classList.add('correct');
+        if (i === index && !isCorrect) btn.classList.add('incorrect');
+    });
+
+    if (isCorrect) score++;
+
+    const fb = document.getElementById('feedbackBox');
+    fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    document.getElementById('feedbackTitle').textContent = isCorrect ? '✅ Correct!' : '❌ Not Quite';
+    document.getElementById('feedbackText').textContent = isCorrect ? q.correctFeedback : q.incorrectFeedback;
+    fb.style.display = 'block';
+
+    document.getElementById('nextBtn').style.display = 'inline-block';
+    document.getElementById('nextBtn').textContent = currentQuestion < questions.length - 1 ? 'Next Question →' : 'See Results →';
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion >= questions.length) { showResults(); }
+    else { renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+}
+
+function showResults() {
+    document.getElementById('quizArea').style.display = 'none';
+    document.querySelector('.progress-container').style.display = 'none';
+
+    const pct = Math.round((score / questions.length) * 100);
+    let gradient, msg, detail;
+    if (pct >= 80) {
+        gradient = 'linear-gradient(135deg, #76C043, #4a8a20)'; msg = 'Excellent Work!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). You understand financial institutions, account types, and deposit insurance. You're ready to make smart banking choices!`;
+    } else if (pct >= 60) {
+        gradient = 'linear-gradient(135deg, #C7922C, #a07520)'; msg = 'Good Effort!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). Solid foundation! Review the sections on account types and FDIC/NCUA insurance to sharpen your understanding.`;
+    } else {
+        gradient = 'linear-gradient(135deg, #e74c5a, #b83040)'; msg = 'Keep Practicing!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). Revisit the Week 8 reading to strengthen your knowledge of banking institutions, savings products, and deposit insurance, then try again.`;
+    }
+
+    document.getElementById('resultsScreen').style.display = 'block';
+    document.getElementById('scoreCircle').style.background = gradient;
+    document.getElementById('scoreCircle').textContent = `${pct}%`;
+    document.getElementById('scoreMsg').textContent = msg;
+    document.getElementById('scoreDetail').textContent = detail;
+    document.getElementById('progressFill').style.width = '100%';
+}
+
+function restartQuiz() {
+    currentQuestion = 0; score = 0;
+    document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('quizArea').style.display = 'block';
+    document.querySelector('.progress-container').style.display = 'block';
+    renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+renderQuestion();
+</script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 7 Activity: Savings Calculator Challenge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@700;800&family=Wix+Madefor+Text:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:#0a0a14; color:#e2e8f0; font-family:'Wix Madefor Text', sans-serif; font-weight:400; line-height:1.7; font-size:16px; }
+        .header-bar { background:#0E1C42; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+        .header-title { font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:18px; color:#fff; letter-spacing:0.5px; }
+        .header-sub { font-size:13px; color:#55C8E8; font-weight:500; }
+        .header-badge { background:linear-gradient(135deg, #F78F1E, #c46a0a); color:#fff; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; padding:6px 16px; border-radius:20px; letter-spacing:0.5px; text-transform:uppercase; }
+        .hero { background:linear-gradient(135deg, #0E1C42 0%, #1a1a3e 40%, #67308F 100%); padding:48px 24px; text-align:center; }
+        .hero h1 { font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:clamp(24px,4.5vw,36px); color:#fff; margin-bottom:8px; }
+        .hero p { color:#c8d6e8; font-size:17px; max-width:600px; margin:0 auto; }
+        .progress-container { max-width:800px; margin:0 auto; padding:24px 24px 0; }
+        .progress-bar-bg { background:#1a1a2e; border-radius:12px; height:14px; overflow:hidden; }
+        .progress-bar-fill { height:100%; border-radius:12px; background:linear-gradient(90deg, #55C8E8, #76C043); transition:width 0.5s ease; }
+        .progress-text { font-size:13px; color:#8899aa; margin-top:6px; text-align:right; font-weight:500; }
+        .content { max-width:800px; margin:0 auto; padding:24px; }
+        .phase-label { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; letter-spacing:2px; text-transform:uppercase; color:#55C8E8; margin-bottom:16px; }
+        .scenario-box { background:#111122; border-radius:12px; padding:20px 24px; margin-bottom:24px; border:1px solid rgba(247,143,30,0.2); }
+        .scenario-label { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:12px; color:#F78F1E; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+        .question-text { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:19px; color:#fff; margin-bottom:20px; line-height:1.4; }
+        .question-counter { font-size:13px; color:#8899aa; margin-bottom:8px; font-weight:500; }
+        .options-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+        @media(max-width:600px) { .options-grid { grid-template-columns:1fr; } }
+        .option-btn { background:#111122; border:2px solid #2a2a4a; border-radius:12px; padding:16px 18px; color:#c8d6e8; font-family:'Wix Madefor Text', sans-serif; font-size:15px; font-weight:500; cursor:pointer; text-align:left; transition:all 0.2s ease; line-height:1.5; }
+        .option-btn:hover { border-color:#55C8E8; background:#161630; }
+        .option-btn.correct { border-color:#76C043; background:rgba(118,192,67,0.12); color:#fff; }
+        .option-btn.incorrect { border-color:#e74c5a; background:rgba(231,76,90,0.1); color:#aaa; }
+        .option-btn.disabled { pointer-events:none; }
+        .feedback { border-radius:12px; padding:18px 22px; margin-top:16px; display:none; line-height:1.6; }
+        .feedback.correct { background:rgba(118,192,67,0.1); border-left:4px solid #76C043; }
+        .feedback.incorrect { background:rgba(231,76,90,0.08); border-left:4px solid #e74c5a; }
+        .feedback-title { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; margin-bottom:6px; }
+        .feedback.correct .feedback-title { color:#76C043; }
+        .feedback.incorrect .feedback-title { color:#e74c5a; }
+        .feedback p { color:#c8d6e8; font-size:14px; }
+        .next-btn { display:none; margin-top:20px; background:linear-gradient(135deg, #55C8E8, #0E5568); color:#fff; border:none; border-radius:10px; padding:14px 32px; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; cursor:pointer; letter-spacing:0.5px; transition:transform 0.15s; }
+        .next-btn:hover { transform:scale(1.03); }
+        .results-screen { display:none; text-align:center; padding:48px 24px; }
+        .score-circle { width:160px; height:160px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; font-family:'Wix Madefor Display', sans-serif; font-weight:800; font-size:42px; color:#fff; }
+        .score-label { font-size:15px; color:#8899aa; margin-bottom:8px; }
+        .score-msg { font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:22px; color:#fff; margin-bottom:8px; }
+        .score-detail { color:#c8d6e8; max-width:500px; margin:0 auto 32px; }
+        .retry-btn { background:linear-gradient(135deg, #F78F1E, #c46a0a); color:#fff; border:none; border-radius:10px; padding:14px 36px; font-family:'Wix Madefor Display', sans-serif; font-weight:700; font-size:15px; cursor:pointer; }
+        .retry-btn:hover { transform:scale(1.03); }
+        .hidden { display:none !important; }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <div>
+            <div class="header-title">Personal Finance &amp; Money Management Honors</div>
+            <div class="header-sub">Optima Academy Online</div>
+        </div>
+        <div class="header-badge">Activity · Week 7</div>
+    </div>
+
+    <div class="hero">
+        <h1>Savings Calculator Challenge</h1>
+        <p>Calculate interest, weigh opportunity costs, and build savings strategies.</p>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+        <div class="progress-text" id="progressText">Question 1 of 10</div>
+    </div>
+
+    <div class="content" id="quizArea">
+        <div id="phaseLabel" class="phase-label"></div>
+        <div id="scenarioBox" class="scenario-box hidden">
+            <div class="scenario-label">📋 SCENARIO</div>
+            <div id="scenarioText"></div>
+        </div>
+        <div class="question-counter" id="questionCounter"></div>
+        <div class="question-text" id="questionText"></div>
+        <div class="options-grid" id="optionsGrid"></div>
+        <div class="feedback" id="feedbackBox"><div class="feedback-title" id="feedbackTitle"></div><p id="feedbackText"></p></div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next Question →</button>
+    </div>
+
+    <div class="results-screen" id="resultsScreen">
+        <div class="score-label">YOUR SCORE</div>
+        <div class="score-circle" id="scoreCircle"></div>
+        <div class="score-msg" id="scoreMsg"></div>
+        <div class="score-detail" id="scoreDetail"></div>
+        <button class="retry-btn" onclick="restartQuiz()">Try Again</button>
+    </div>
+
+<script>
+const questions = [
+    // PHASE 1: Time Value of Money & Interest Basics (Q1-4)
+    {
+        phase: "PHASE 1: TIME VALUE OF MONEY & INTEREST",
+        scenario: "Eliana, a junior in Gainesville, received $500 as a graduation gift from her grandmother. She's deciding whether to spend it now or save it.",
+        question: "Why is $500 today worth more than $500 three years from now?",
+        options: ["Because prices never change over time", "Because today's $500 can earn interest and grow, while future $500 cannot go back in time", "Because banks charge you to hold money", "Because $500 won't exist in three years"],
+        correct: 1,
+        correctFeedback: "The time value of money means today's money can be invested and earn returns. $500 saved at 5% compound interest would grow to about $579 in 3 years. Future money misses out on that earning potential.",
+        incorrectFeedback: "The time value of money principle says today's $500 is worth more because it can earn interest starting now. At 5% compound interest, it would grow to about $579 in 3 years — that's $79 the future $500 can never earn."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Eliana deposits her $500 at 4% simple interest for 2 years. How much interest will she earn? (Use I = P × r × t)",
+        options: ["$20", "$40", "$80", "$400"],
+        correct: 1,
+        correctFeedback: "I = P × r × t = $500 × 0.04 × 2 = $40. Eliana earns $40 in simple interest, giving her a total of $540 after 2 years. The interest is the same each year ($20).",
+        incorrectFeedback: "Use the formula: I = P × r × t. That's $500 × 0.04 × 2 = $40 in total interest. With simple interest, she earns $20 each year, for a total of $40 over 2 years."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Now imagine Eliana's $500 earns 4% compound interest (compounded annually) for 2 years. How does the result compare to simple interest?",
+        options: ["It's exactly the same — $40 in interest", "It's slightly more — $40.80 in interest because she earns interest on interest", "It's less because compound interest is slower", "It's double — $80 in interest"],
+        correct: 1,
+        correctFeedback: "With compound interest: Year 1 = $500 × 1.04 = $520. Year 2 = $520 × 1.04 = $540.80. That's $40.80 total interest — $0.80 more than simple interest. The extra comes from earning interest on Year 1's interest.",
+        incorrectFeedback: "Compound interest earns slightly more: Year 1 = $500 × 1.04 = $520. Year 2 = $520 × 1.04 = $540.80. Total interest = $40.80 vs. $40 from simple interest. The $0.80 extra is interest earned on Year 1's $20 interest."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Which factor has the GREATEST impact on how much compound interest you earn over time?",
+        options: ["The interest rate alone", "The amount of your initial deposit alone", "Time — how long your money stays invested", "The bank you choose"],
+        correct: 2,
+        correctFeedback: "Time is the most powerful factor in compound interest. The longer your money compounds, the faster it grows — because each year's interest earns interest the following year. This is why starting early matters more than starting big.",
+        incorrectFeedback: "While rate and principal matter, time has the greatest impact on compound interest growth. The compounding effect accelerates over time — $1,000 at 5% grows to $1,629 in 10 years but $4,322 in 30 years. Time is the multiplier."
+    },
+    // PHASE 2: Opportunity Cost & Spending Decisions (Q5-7)
+    {
+        phase: "PHASE 2: OPPORTUNITY COST OF SPENDING vs. SAVING",
+        scenario: "Marcus, a senior in Jacksonville, earns $600/month. He spends $40/week eating out with friends — about $160/month. His friend suggests he could save half that amount instead.",
+        question: "If Marcus saves $80/month at 5% compound interest for 5 years instead of spending it on food, approximately how much would he have?",
+        options: ["$4,800 (just the deposits)", "$5,440 (deposits plus about $640 in interest)", "$8,000 (deposits doubled)", "$3,600 (half of deposits)"],
+        correct: 1,
+        correctFeedback: "Marcus would deposit $80 × 60 months = $4,800 in principal. With 5% compound interest, he'd earn approximately $640 in interest, totaling about $5,440. That's real money earned just by cutting dining out in half!",
+        incorrectFeedback: "Total deposits: $80 × 60 months = $4,800. With compound interest at 5%, he earns roughly $640 in interest over 5 years, for a total of about $5,440. The interest is essentially free money from the bank."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Marcus wants to buy a $300 gaming headset. What is the opportunity cost of this purchase?",
+        options: ["$300 — the sticker price of the headset", "The next best thing he could do with that $300, like saving or investing it", "The sales tax on the purchase", "Nothing — he earned the money, so there's no cost"],
+        correct: 1,
+        correctFeedback: "Opportunity cost is the value of the next best alternative. If Marcus saves that $300 instead and it earns 5% for 10 years, it becomes ~$489. The opportunity cost of the headset isn't just $300 — it's the future value of that money.",
+        incorrectFeedback: "Opportunity cost isn't the price you pay — it's what you give up. If Marcus could save or invest that $300 and watch it grow to ~$489 over 10 years, the opportunity cost of the headset includes that lost growth."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Which statement BEST describes how to think about spending vs. saving?",
+        options: ["Never spend money on things you enjoy — save everything", "Only spend money if you have no savings goals", "Balance present enjoyment with future goals by making intentional choices", "Save until you're 30, then start spending freely"],
+        correct: 2,
+        correctFeedback: "Smart financial planning is about balance and intentionality. You don't have to choose all saving or all spending — you should understand the trade-offs and make conscious decisions that align with both your current lifestyle and future goals.",
+        incorrectFeedback: "Personal finance isn't all-or-nothing. The best approach is to balance present enjoyment with future security by making intentional choices about where your money goes. Every spending decision should be conscious, not impulsive."
+    },
+    // PHASE 3: Savings Strategies (Q8-10)
+    {
+        phase: "PHASE 3: SAVINGS STRATEGIES & GOALS",
+        scenario: "Camila, a 10th grader in Orlando, earns $450/month from her part-time job. She wants to build an emergency fund, save for a used car, and still have money for going out with friends.",
+        question: "What is the recommended starting goal for a high school student's emergency fund?",
+        options: ["$50 — just enough for one emergency", "$500–$1,000 — enough to cover most unexpected expenses", "$5,000 — three months of full expenses", "$10,000 — six months of adult-level expenses"],
+        correct: 1,
+        correctFeedback: "$500–$1,000 is a realistic emergency fund goal for high school students. It covers most unexpected costs (phone screen repair, car trouble, medical copay) without requiring an unrealistic savings commitment.",
+        incorrectFeedback: "For high school students, $500–$1,000 is the recommended starting emergency fund. It's enough to handle most unexpected expenses without being so large that it feels impossible to reach."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Camila decides to use the 'pay yourself first' strategy. What does this mean?",
+        options: ["She pays all her bills before doing anything else", "She transfers money to savings immediately when she gets paid, before spending on anything", "She buys herself something nice with each paycheck as a reward", "She pays back money she borrowed from friends first"],
+        correct: 1,
+        correctFeedback: "Pay yourself first means savings is the first 'bill' you pay — move money to savings immediately when your paycheck arrives. If Camila transfers $100 to savings right away, she lives on the remaining $350 and never misses the saved amount.",
+        incorrectFeedback: "Pay yourself first means treating savings like your most important expense. The moment Camila gets paid, she transfers a set amount to savings BEFORE paying bills or spending. This ensures saving happens consistently."
+    },
+    {
+        phase: "",
+        scenario: "",
+        question: "Camila sets up three savings goals: emergency fund ($40/month), car fund ($60/month), and fun money ($20/month). After 12 months, how much will she have in her car fund?",
+        options: ["$480", "$720", "$600", "$1,440"],
+        correct: 1,
+        correctFeedback: "$60/month × 12 months = $720 in her car fund (not counting interest). By splitting her $120 monthly savings across goals, Camila makes steady progress toward multiple priorities — and she'll also have $480 in her emergency fund and $240 in fun money.",
+        incorrectFeedback: "Car fund: $60/month × 12 months = $720. She also builds $480 in her emergency fund ($40 × 12) and $240 in fun money ($20 × 12). Multi-goal saving keeps progress moving on all fronts."
+    }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+function renderQuestion() {
+    const q = questions[currentQuestion];
+    document.getElementById('progressFill').style.width = ((currentQuestion) / questions.length * 100) + '%';
+    document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+
+    const phaseLabel = document.getElementById('phaseLabel');
+    if (q.phase) { phaseLabel.textContent = q.phase; phaseLabel.classList.remove('hidden'); }
+    else { phaseLabel.classList.add('hidden'); }
+
+    const scenarioBox = document.getElementById('scenarioBox');
+    if (q.scenario) { document.getElementById('scenarioText').innerHTML = `<p style="color:#c8d6e8; margin:0;">${q.scenario}</p>`; scenarioBox.classList.remove('hidden'); }
+    else { scenarioBox.classList.add('hidden'); }
+
+    document.getElementById('questionCounter').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+    document.getElementById('questionText').textContent = q.question;
+
+    const grid = document.getElementById('optionsGrid');
+    grid.innerHTML = '';
+    q.options.forEach((opt, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = opt;
+        btn.onclick = () => selectAnswer(i);
+        grid.appendChild(btn);
+    });
+
+    document.getElementById('feedbackBox').style.display = 'none';
+    document.getElementById('nextBtn').style.display = 'none';
+    answered = false;
+}
+
+function selectAnswer(index) {
+    if (answered) return;
+    answered = true;
+    const q = questions[currentQuestion];
+    const buttons = document.querySelectorAll('.option-btn');
+    const isCorrect = index === q.correct;
+
+    buttons.forEach((btn, i) => {
+        btn.classList.add('disabled');
+        if (i === q.correct) btn.classList.add('correct');
+        if (i === index && !isCorrect) btn.classList.add('incorrect');
+    });
+
+    if (isCorrect) score++;
+
+    const fb = document.getElementById('feedbackBox');
+    fb.className = 'feedback ' + (isCorrect ? 'correct' : 'incorrect');
+    document.getElementById('feedbackTitle').textContent = isCorrect ? '✅ Correct!' : '❌ Not Quite';
+    document.getElementById('feedbackText').textContent = isCorrect ? q.correctFeedback : q.incorrectFeedback;
+    fb.style.display = 'block';
+
+    document.getElementById('nextBtn').style.display = 'inline-block';
+    document.getElementById('nextBtn').textContent = currentQuestion < questions.length - 1 ? 'Next Question →' : 'See Results →';
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion >= questions.length) { showResults(); }
+    else { renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+}
+
+function showResults() {
+    document.getElementById('quizArea').style.display = 'none';
+    document.querySelector('.progress-container').style.display = 'none';
+
+    const pct = Math.round((score / questions.length) * 100);
+    let gradient, msg, detail;
+    if (pct >= 80) {
+        gradient = 'linear-gradient(135deg, #76C043, #4a8a20)'; msg = 'Excellent Work!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). You have a strong grasp of saving concepts, interest calculations, and the time value of money. Your future self will thank you!`;
+    } else if (pct >= 60) {
+        gradient = 'linear-gradient(135deg, #C7922C, #a07520)'; msg = 'Good Effort!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). You understand the basics well. Review the interest calculation formulas and opportunity cost sections to sharpen your skills.`;
+    } else {
+        gradient = 'linear-gradient(135deg, #e74c5a, #b83040)'; msg = 'Keep Practicing!';
+        detail = `You scored ${score}/${questions.length} (${pct}%). Revisit the Week 7 reading, especially the sections on simple vs. compound interest and savings strategies, then try again.`;
+    }
+
+    document.getElementById('resultsScreen').style.display = 'block';
+    document.getElementById('scoreCircle').style.background = gradient;
+    document.getElementById('scoreCircle').textContent = `${pct}%`;
+    document.getElementById('scoreMsg').textContent = msg;
+    document.getElementById('scoreDetail').textContent = detail;
+    document.getElementById('progressFill').style.width = '100%';
+}
+
+function restartQuiz() {
+    currentQuestion = 0; score = 0;
+    document.getElementById('resultsScreen').style.display = 'none';
+    document.getElementById('quizArea').style.display = 'block';
+    document.querySelector('.progress-container').style.display = 'block';
+    renderQuestion(); window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+renderQuestion();
+</script>
+</body>
+</html>
