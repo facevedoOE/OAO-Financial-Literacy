@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 15 Activity: Life Plan Builder</title>
+    <link href="https://fonts.googleapis.com/css2?family=Wix+Madefor+Display:wght@700;800&family=Wix+Madefor+Text:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}body{background:#0a0a14;color:#e2e8f0;font-family:'Wix Madefor Text',sans-serif;font-weight:400;line-height:1.7;font-size:16px}
+        .header-bar{background:#0E1C42;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}.header-title{font-family:'Wix Madefor Display',sans-serif;font-weight:800;font-size:18px;color:#fff}.header-sub{font-size:13px;color:#55C8E8;font-weight:500}.header-badge{background:linear-gradient(135deg,#C7922C,#8a6420);color:#fff;font-family:'Wix Madefor Display',sans-serif;font-weight:700;font-size:12px;padding:6px 16px;border-radius:20px;text-transform:uppercase}
+        .hero{background:linear-gradient(135deg,#0E1C42 0%,#1a1a3e 30%,#67308F 70%,#C7922C 100%);padding:48px 24px;text-align:center}.hero h1{font-family:'Wix Madefor Display',sans-serif;font-weight:800;font-size:clamp(24px,4.5vw,36px);color:#fff;margin-bottom:8px}.hero p{color:#c8d6e8;font-size:17px;max-width:600px;margin:0 auto}
+        .content{max-width:800px;margin:0 auto;padding:24px}
+        .step-nav{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:32px}
+        .step-dot{width:40px;height:40px;border-radius:50%;border:2px solid #2a2a4a;display:flex;align-items:center;justify-content:center;font-family:'Wix Madefor Display',sans-serif;font-weight:700;font-size:14px;color:#8899aa;cursor:pointer;transition:all .2s}
+        .step-dot.active{background:linear-gradient(135deg,#55C8E8,#0E5568);border-color:#55C8E8;color:#fff}
+        .step-dot.complete{background:linear-gradient(135deg,#76C043,#4a8a20);border-color:#76C043;color:#fff}
+        .section{display:none}.section.active{display:block}
+        .section-title{font-family:'Wix Madefor Display',sans-serif;font-weight:800;font-size:24px;color:#fff;margin-bottom:8px}
+        .section-desc{color:#c8d6e8;margin-bottom:24px}
+        label{display:block;font-family:'Wix Madefor Display',sans-serif;font-weight:700;font-size:14px;color:#55C8E8;margin-bottom:6px;margin-top:16px}
+        input[type="text"],input[type="number"],textarea,select{width:100%;background:#111122;border:2px solid #2a2a4a;border-radius:10px;padding:12px 16px;color:#e2e8f0;font-family:'Wix Madefor Text',sans-serif;font-size:15px;transition:border .2s;outline:none}
+        input:focus,textarea:focus,select:focus{border-color:#55C8E8}
+        textarea{min-height:80px;resize:vertical}
+        select{appearance:none;cursor:pointer}
+        .calc-box{background:#0a0a14;border-radius:8px;padding:16px;margin:16px 0;border:1px solid #2a2a4a}
+        .calc-row{display:flex;justify-content:space-between;padding:6px 0;color:#c8d6e8;font-size:15px}
+        .calc-row.total{border-top:2px solid #55C8E8;margin-top:8px;padding-top:12px;font-weight:600;color:#fff}
+        .calc-val{color:#76C043;font-weight:600}
+        .calc-val.negative{color:#e74c5a}
+        .nav-buttons{display:flex;gap:12px;margin-top:32px;justify-content:space-between}
+        .btn{padding:14px 28px;border:none;border-radius:10px;font-family:'Wix Madefor Display',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:transform .15s}
+        .btn:hover{transform:scale(1.03)}
+        .btn-next{background:linear-gradient(135deg,#55C8E8,#0E5568);color:#fff}
+        .btn-prev{background:#111122;border:2px solid #2a2a4a;color:#c8d6e8}
+        .btn-print{background:linear-gradient(135deg,#76C043,#4a8a20);color:#fff}
+        .summary-card{background:#111122;border-radius:12px;padding:20px;margin-bottom:16px}
+        .summary-label{font-family:'Wix Madefor Display',sans-serif;font-weight:700;font-size:13px;color:#55C8E8;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+        .tip-box{background:linear-gradient(135deg,rgba(199,146,44,.08),rgba(199,146,44,.03));border-left:4px solid #C7922C;border-radius:0 8px 8px 0;padding:14px 18px;margin:16px 0;font-size:14px;color:#c8d6e8}
+        @media print{body{background:#fff;color:#000}.header-bar,.hero,.step-nav,.nav-buttons,.tip-box{display:none}.content{padding:0}.section{display:block!important}.summary-card{border:1px solid #ccc;break-inside:avoid}}
+    </style>
+</head>
+<body>
+    <div class="header-bar"><div><div class="header-title">Personal Finance &amp; Money Management Honors</div><div class="header-sub">Optima Academy Online</div></div><div class="header-badge">Activity · Week 15 · Capstone</div></div>
+    <div class="hero"><h1>Life Plan Builder</h1><p>Walk through each component of your capstone project step-by-step.</p></div>
+
+    <div class="content">
+        <div class="step-nav" id="stepNav"></div>
+
+        <!-- STEP 1: Career -->
+        <div class="section active" id="step1">
+            <div class="section-title">Step 1: Career &amp; Income</div>
+            <div class="section-desc">Research a career and calculate your expected take-home pay.</div>
+            <label>Career / Job Title</label>
+            <input type="text" id="career" placeholder="e.g., Registered Nurse, Software Developer, Marketing Manager">
+            <label>Annual Salary (before taxes)</label>
+            <input type="number" id="salary" placeholder="e.g., 55000" oninput="calcIncome()">
+            <label>Estimated Tax Rate (%)</label>
+            <input type="number" id="taxRate" value="27" max="50" oninput="calcIncome()">
+            <div class="calc-box">
+                <div class="calc-row"><span>Gross annual salary</span><span class="calc-val" id="grossAnnual">$0</span></div>
+                <div class="calc-row"><span>Estimated taxes</span><span class="calc-val negative" id="taxAmount">−$0</span></div>
+                <div class="calc-row total"><span>Monthly take-home pay</span><span class="calc-val" id="monthlyTakeHome">$0</span></div>
+            </div>
+            <label>Education Required</label>
+            <input type="text" id="education" placeholder="e.g., Bachelor's degree in Nursing (BSN), 4 years">
+            <label>Estimated Education Cost</label>
+            <input type="number" id="eduCost" placeholder="e.g., 24000">
+            <div class="tip-box">💡 Use <strong>bls.gov/ooh</strong> to research salaries and education requirements for your chosen career in Florida.</div>
+        </div>
+
+        <!-- STEP 2: Budget -->
+        <div class="section" id="step2">
+            <div class="section-title">Step 2: Monthly Budget</div>
+            <div class="section-desc">Build a realistic monthly budget based on your take-home pay.</div>
+            <label>Budgeting Method</label>
+            <select id="budgetMethod"><option value="5030">50/30/20 Rule</option><option value="zero">Zero-Based Budget</option></select>
+            <div style="font-family:'Wix Madefor Display',sans-serif;font-weight:700;font-size:16px;color:#fff;margin:20px 0 8px;">Fixed Expenses</div>
+            <label>Rent / Housing</label><input type="number" id="rent" placeholder="e.g., 1200" oninput="calcBudget()">
+            <label>Car Payment</label><input type="number" id="carPayment" placeholder="e.g., 300" oninput="calcBudget()">
+            <label>Auto Insurance</label><input type="number" id="autoIns" placeholder="e.g., 200" oninput="calcBudget()">
+            <label>Health Insurance (if not employer-covered)</label><input type="number" id="healthIns" placeholder="e.g., 0" oninput="calcBudget()">
+            <label>Phone Plan</label><input type="number" id="phone" placeholder="e.g., 50" oninput="calcBudget()">
+            <label>Student Loan Payment</label><input type="number" id="studentLoan" placeholder="e.g., 250" oninput="calcBudget()">
+            <label>Subscriptions / Other Fixed</label><input type="number" id="subs" placeholder="e.g., 30" oninput="calcBudget()">
+            <div style="font-family:'Wix Madefor Display',sans-serif;font-weight:700;font-size:16px;color:#fff;margin:20px 0 8px;">Variable Expenses</div>
+            <label>Groceries</label><input type="number" id="groceries" placeholder="e.g., 300" oninput="calcBudget()">
+            <label>Gas / Transportation</label><input type="number" id="gas" placeholder="e.g., 120" oninput="calcBudget()">
+            <label>Dining Out / Entertainment</label><input type="number" id="dining" placeholder="e.g., 150" oninput="calcBudget()">
+            <label>Clothing / Personal</label><input type="number" id="clothing" placeholder="e.g., 75" oninput="calcBudget()">
+            <div style="font-family:'Wix Madefor Display',sans-serif;font-weight:700;font-size:16px;color:#fff;margin:20px 0 8px;">Savings</div>
+            <label>Emergency Fund</label><input type="number" id="emergSave" placeholder="e.g., 100" oninput="calcBudget()">
+            <label>Retirement (401k/Roth IRA)</label><input type="number" id="retirement" placeholder="e.g., 200" oninput="calcBudget()">
+            <label>Other Savings Goals</label><input type="number" id="otherSave" placeholder="e.g., 50" oninput="calcBudget()">
+            <div class="calc-box" id="budgetCalc">
+                <div class="calc-row"><span>Monthly take-home</span><span class="calc-val" id="budgetIncome">$0</span></div>
+                <div class="calc-row"><span>Total expenses</span><span class="calc-val negative" id="totalExpenses">−$0</span></div>
+                <div class="calc-row"><span>Total savings</span><span class="calc-val" id="totalSavings">$0</span></div>
+                <div class="calc-row total"><span>Remaining</span><span class="calc-val" id="remaining">$0</span></div>
+            </div>
+            <div class="tip-box">💡 Use <strong>apartments.com</strong> to find real rent prices in your Florida city. Your budget should balance to $0 or very close.</div>
+        </div>
+
+        <!-- STEP 3: Investments -->
+        <div class="section" id="step3">
+            <div class="section-title">Step 3: Savings &amp; Investment Strategy</div>
+            <div class="section-desc">Plan your emergency fund, retirement accounts, and long-term growth.</div>
+            <label>Emergency Fund Goal (3–6 months of essential expenses)</label>
+            <input type="number" id="emergGoal" placeholder="e.g., 8000">
+            <label>Months to Reach Emergency Fund Goal</label>
+            <input type="number" id="emergMonths" placeholder="e.g., 24">
+            <label>Retirement Account Type</label>
+            <select id="retireType"><option value="roth">Roth IRA</option><option value="401k">401(k)</option><option value="both">Both (Roth IRA + 401k)</option></select>
+            <label>Monthly Retirement Contribution ($)</label>
+            <input type="number" id="retireContrib" placeholder="e.g., 200" oninput="calcRetire()">
+            <label>Employer 401(k) Match ($/month, 0 if N/A)</label>
+            <input type="number" id="employerMatch" placeholder="e.g., 150" oninput="calcRetire()">
+            <label>Expected Average Annual Return (%)</label>
+            <input type="number" id="returnRate" value="8" oninput="calcRetire()">
+            <label>Years Until Retirement (age 65)</label>
+            <input type="number" id="retireYears" placeholder="e.g., 43" oninput="calcRetire()">
+            <label>Investment Approach</label>
+            <select id="investApproach"><option value="index">S&P 500 Index Fund / ETF</option><option value="target">Target-Date Retirement Fund</option><option value="mix">Diversified Mix (stocks + bonds)</option></select>
+            <div class="calc-box">
+                <div class="calc-row"><span>Your monthly contribution</span><span class="calc-val" id="yourContrib">$0</span></div>
+                <div class="calc-row"><span>Employer match</span><span class="calc-val" id="matchDisplay">$0</span></div>
+                <div class="calc-row"><span>Total monthly invested</span><span class="calc-val" id="totalMonthly">$0</span></div>
+                <div class="calc-row total"><span>Projected value at retirement</span><span class="calc-val" id="retireProjection">$0</span></div>
+            </div>
+            <div class="tip-box">💡 Use the compound interest calculator at <strong>investor.gov</strong> to verify your projection.</div>
+        </div>
+
+        <!-- STEP 4: Risk Management -->
+        <div class="section" id="step4">
+            <div class="section-title">Step 4: Risk Management Plan</div>
+            <div class="section-desc">Identify the insurance and protection strategies you'll need.</div>
+            <label>Insurance Types You'll Need (check all that apply)</label>
+            <div style="display:grid;gap:8px;margin:8px 0 16px;">
+                <label style="display:flex;align-items:center;gap:10px;margin:0;color:#c8d6e8;font-family:'Wix Madefor Text',sans-serif;font-weight:400;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="insHealth" checked style="width:18px;height:18px;accent-color:#55C8E8;"> Health Insurance</label>
+                <label style="display:flex;align-items:center;gap:10px;margin:0;color:#c8d6e8;font-family:'Wix Madefor Text',sans-serif;font-weight:400;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="insAuto" checked style="width:18px;height:18px;accent-color:#55C8E8;"> Auto Insurance</label>
+                <label style="display:flex;align-items:center;gap:10px;margin:0;color:#c8d6e8;font-family:'Wix Madefor Text',sans-serif;font-weight:400;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="insRenters" checked style="width:18px;height:18px;accent-color:#55C8E8;"> Renters Insurance</label>
+                <label style="display:flex;align-items:center;gap:10px;margin:0;color:#c8d6e8;font-family:'Wix Madefor Text',sans-serif;font-weight:400;font-size:15px;cursor:pointer;">
+                    <input type="checkbox" id="insLife" style="width:18px;height:18px;accent-color:#55C8E8;"> Life Insurance</label>
+            </div>
+            <label>Estimated Total Monthly Insurance Cost</label>
+            <input type="number" id="totalInsCost" placeholder="e.g., 420">
+            <label>Your Identity Theft Prevention Plan</label>
+            <textarea id="idTheftPlan" placeholder="Describe the steps you'll take: 2FA, credit freeze, unique passwords, monitoring bank statements..."></textarea>
+            <label>How Will Your Emergency Fund Protect You?</label>
+            <textarea id="emergProtect" placeholder="Describe what your emergency fund covers that insurance doesn't (job loss, sub-deductible repairs, etc.)"></textarea>
+        </div>
+
+        <!-- STEP 5: Reflection -->
+        <div class="section" id="step5">
+            <div class="section-title">Step 5: Reflection</div>
+            <div class="section-desc">Reflect on what you've learned and how it will shape your financial future.</div>
+            <label>What was the most surprising thing you learned in this course?</label>
+            <textarea id="reflect1" placeholder="Write 2–3 sentences..."></textarea>
+            <label>What financial habit will you start now — before you even graduate?</label>
+            <textarea id="reflect2" placeholder="Write 2–3 sentences..."></textarea>
+            <label>Name one financial mistake you'll avoid and explain why.</label>
+            <textarea id="reflect3" placeholder="Write 2–3 sentences..."></textarea>
+            <label>Presentation Format You'll Use</label>
+            <select id="presFormat"><option value="report">Written Report (3–5 pages)</option><option value="slides">Slide Presentation (10–15 slides)</option><option value="video">Video Pitch (5–8 minutes)</option></select>
+        </div>
+
+        <!-- STEP 6: Summary -->
+        <div class="section" id="step6">
+            <div class="section-title">📋 Your Life Plan Summary</div>
+            <div class="section-desc">Review your complete plan below. Use this as the foundation for your capstone submission.</div>
+            <div id="summaryContent"></div>
+            <div style="margin-top:24px;text-align:center;">
+                <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="btn btn-prev" id="prevBtn" onclick="navigate(-1)" style="display:none">← Previous</button>
+            <button class="btn btn-next" id="nextBtn" onclick="navigate(1)">Next Step →</button>
+        </div>
+    </div>
+
+<script>
+let currentStep = 1;
+const totalSteps = 6;
+
+function buildNav() {
+    const nav = document.getElementById('stepNav');
+    for (let i = 1; i <= totalSteps; i++) {
+        const dot = document.createElement('div');
+        dot.className = 'step-dot' + (i === 1 ? ' active' : '');
+        dot.textContent = i;
+        dot.onclick = () => goToStep(i);
+        dot.id = 'dot' + i;
+        nav.appendChild(dot);
+    }
+}
+
+function goToStep(n) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.step-dot').forEach(d => d.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    document.getElementById('dot' + n).classList.add('active');
+    currentStep = n;
+    document.getElementById('prevBtn').style.display = n > 1 ? 'inline-block' : 'none';
+    document.getElementById('nextBtn').textContent = n < totalSteps ? 'Next Step →' : 'View Summary →';
+    if (n === totalSteps) buildSummary();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function navigate(dir) {
+    const next = currentStep + dir;
+    if (next < 1 || next > totalSteps) return;
+    if (dir > 0 && currentStep < totalSteps) document.getElementById('dot' + currentStep).classList.add('complete');
+    goToStep(next);
+}
+
+function val(id) { return parseFloat(document.getElementById(id).value) || 0; }
+function fmt(n) { return '$' + Math.round(n).toLocaleString(); }
+function txt(id) { return document.getElementById(id).value || '—'; }
+
+function calcIncome() {
+    const s = val('salary'), t = val('taxRate') / 100;
+    document.getElementById('grossAnnual').textContent = fmt(s);
+    document.getElementById('taxAmount').textContent = '−' + fmt(s * t);
+    document.getElementById('monthlyTakeHome').textContent = fmt(s * (1 - t) / 12);
+}
+
+function calcBudget() {
+    const income = val('salary') * (1 - val('taxRate') / 100) / 12;
+    const expenses = val('rent') + val('carPayment') + val('autoIns') + val('healthIns') + val('phone') + val('studentLoan') + val('subs') + val('groceries') + val('gas') + val('dining') + val('clothing');
+    const savings = val('emergSave') + val('retirement') + val('otherSave');
+    const remaining = income - expenses - savings;
+    document.getElementById('budgetIncome').textContent = fmt(income);
+    document.getElementById('totalExpenses').textContent = '−' + fmt(expenses);
+    document.getElementById('totalSavings').textContent = fmt(savings);
+    const rem = document.getElementById('remaining');
+    rem.textContent = fmt(remaining);
+    rem.className = 'calc-val' + (remaining < 0 ? ' negative' : '');
+}
+
+function calcRetire() {
+    const c = val('retireContrib'), m = val('employerMatch'), r = val('returnRate') / 100 / 12, n = val('retireYears') * 12;
+    const total = c + m;
+    let fv = 0;
+    if (r > 0 && n > 0) fv = total * ((Math.pow(1 + r, n) - 1) / r);
+    else fv = total * n;
+    document.getElementById('yourContrib').textContent = fmt(c);
+    document.getElementById('matchDisplay').textContent = fmt(m);
+    document.getElementById('totalMonthly').textContent = fmt(total);
+    document.getElementById('retireProjection').textContent = fmt(fv);
+}
+
+function buildSummary() {
+    const income = val('salary') * (1 - val('taxRate') / 100) / 12;
+    const c = val('retireContrib'), m = val('employerMatch'), r = val('returnRate') / 100 / 12, n = val('retireYears') * 12;
+    let fv = 0;
+    if (r > 0 && n > 0) fv = (c + m) * ((Math.pow(1 + r, n) - 1) / r);
+    const ins = [];
+    if (document.getElementById('insHealth').checked) ins.push('Health');
+    if (document.getElementById('insAuto').checked) ins.push('Auto');
+    if (document.getElementById('insRenters').checked) ins.push('Renters');
+    if (document.getElementById('insLife').checked) ins.push('Life');
+
+    document.getElementById('summaryContent').innerHTML = `
+        <div class="summary-card"><div class="summary-label">1. Career & Income</div>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Career:</strong> ${txt('career')}</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Gross Salary:</strong> ${fmt(val('salary'))}/year</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Take-Home:</strong> ${fmt(income)}/month</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Education:</strong> ${txt('education')} (${fmt(val('eduCost'))})</p></div>
+
+        <div class="summary-card"><div class="summary-label">2. Monthly Budget</div>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Method:</strong> ${document.getElementById('budgetMethod').selectedOptions[0].text}</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Housing:</strong> ${fmt(val('rent'))} | <strong style="color:#fff">Car:</strong> ${fmt(val('carPayment'))} | <strong style="color:#fff">Insurance:</strong> ${fmt(val('autoIns') + val('healthIns'))}</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Food:</strong> ${fmt(val('groceries') + val('dining'))} | <strong style="color:#fff">Transport:</strong> ${fmt(val('gas'))} | <strong style="color:#fff">Personal:</strong> ${fmt(val('clothing'))}</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Total Savings:</strong> ${fmt(val('emergSave') + val('retirement') + val('otherSave'))}/month</p></div>
+
+        <div class="summary-card"><div class="summary-label">3. Savings & Investment Strategy</div>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Emergency Fund Goal:</strong> ${fmt(val('emergGoal'))} (reach in ${val('emergMonths')} months)</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Retirement Account:</strong> ${document.getElementById('retireType').selectedOptions[0].text}</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Monthly Investment:</strong> ${fmt(c)} + ${fmt(m)} match = ${fmt(c + m)}/month</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Approach:</strong> ${document.getElementById('investApproach').selectedOptions[0].text}</p>
+        <p style="color:#76C043;margin:4px 0;font-weight:600"><strong style="color:#fff">Projected at Retirement:</strong> ${fmt(fv)}</p></div>
+
+        <div class="summary-card"><div class="summary-label">4. Risk Management</div>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Insurance:</strong> ${ins.join(', ') || 'None selected'} (${fmt(val('totalInsCost'))}/month)</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">ID Theft Prevention:</strong> ${txt('idTheftPlan')}</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Emergency Fund Role:</strong> ${txt('emergProtect')}</p></div>
+
+        <div class="summary-card"><div class="summary-label">5. Reflection</div>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Most surprising:</strong> ${txt('reflect1')}</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Habit to start now:</strong> ${txt('reflect2')}</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Mistake to avoid:</strong> ${txt('reflect3')}</p>
+        <p style="color:#c8d6e8;margin:4px 0"><strong style="color:#fff">Format:</strong> ${document.getElementById('presFormat').selectedOptions[0].text}</p></div>
+    `;
+}
+
+buildNav();
+</script>
+</body>
+</html>
